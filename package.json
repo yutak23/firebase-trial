@@ -16,6 +16,7 @@
 		"simple-git-hooks": "^2.8.1"
 	},
 	"scripts": {
+		"start": "firebase emulators:start",
 		"style": "prettier --ignore-unknown --write .",
 		"prepare": "npx simple-git-hooks",
 		"postinstall": "cd functions && yarn install"

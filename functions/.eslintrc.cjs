@@ -6,7 +6,7 @@ module.exports = {
 	},
 	extends: ['eslint:recommended', 'google', 'airbnb-base', 'prettier'],
 	rules: {
-		'import/no-extraneous-dependencies': ['warn', { packageDir: './' }]
+		'import/no-extraneous-dependencies': 'warn'
 	},
 	overrides: [
 		{

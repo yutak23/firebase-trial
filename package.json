@@ -4,11 +4,30 @@
 	"main": "index.js",
 	"license": "MIT",
 	"private": true,
-	"scripts": {
-		"style": "prettier --ignore-unknown --write ."
-	},
 	"devDependencies": {
+		"@commitlint/cli": "^17.4.4",
+		"@commitlint/config-conventional": "^17.4.4",
+		"eslint": "^8.2.0",
+		"eslint-config-prettier": "^8.7.0",
 		"firebase-tools": "^11.24.1",
-		"prettier": "^2.8.4"
+		"license-checker": "^25.0.1",
+		"lint-staged": "^13.2.0",
+		"prettier": "^2.8.4",
+		"simple-git-hooks": "^2.8.1"
+	},
+	"scripts": {
+		"style": "prettier --ignore-unknown --write .",
+		"prepare": "npx simple-git-hooks",
+		"postinstall": "cd functions && yarn install"
+	},
+	"lint-staged": {
+		"*": "npx prettier --ignore-unknown --write",
+		"*.js|*.cjs|*.mjs": "npx eslint --ignore-path .gitignore",
+		"./yarn.lock": "npx license-checker --development --failOn \"GPL;AGPL;LGPL;NGPL\" --summary",
+		"./functions/yarn.lock": "npx license-checker --start ./functions --production --failOn \"GPL;AGPL;LGPL;NGPL\" --summary"
+	},
+	"simple-git-hooks": {
+		"pre-commit": "npx lint-staged --verbose",
+		"commit-msg": "npx commitlint -e"
 	}
 }

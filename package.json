@@ -1,10 +1,14 @@
 {
-  "name": "firebase-cloud-functions-trial",
-  "version": "1.0.0",
-  "main": "index.js",
-  "license": "MIT",
-  "private": true,
-  "devDependencies": {
-    "firebase-tools": "^11.24.1"
-  }
+	"name": "firebase-cloud-functions-trial",
+	"version": "1.0.0",
+	"main": "index.js",
+	"license": "MIT",
+	"private": true,
+	"scripts": {
+		"style": "prettier --ignore-unknown --write ."
+	},
+	"devDependencies": {
+		"firebase-tools": "^11.24.1",
+		"prettier": "^2.8.4"
+	}
 }

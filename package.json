@@ -17,6 +17,7 @@
 	},
 	"scripts": {
 		"start": "firebase emulators:start",
+		"deploy": "firebase deploy",
 		"style": "prettier --ignore-unknown --write .",
 		"prepare": "npx simple-git-hooks",
 		"postinstall": "cd functions && yarn install"

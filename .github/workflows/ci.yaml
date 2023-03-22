@@ -1,0 +1,27 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+
+  workflow_dispatch:
+
+jobs:
+  test-on-ci:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: actions/setup-node@v3
+        with:
+          node-version: 16
+          cache: 'yarn'
+
+      - name: yarn install
+        run: yarn install --frozen-lockfile
+
+      - name: run lint
+        run: yarn lint
+
+      - name: build
+        run: yarn build

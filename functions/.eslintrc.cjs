@@ -4,7 +4,7 @@ module.exports = {
 	parserOptions: {
 		ecmaVersion: 2023
 	},
-	extends: ['eslint:recommended', 'google', 'airbnb-base', 'prettier'],
+	extends: ['google', 'prettier'],
 	rules: {
 		'import/no-extraneous-dependencies': 'warn'
 	},

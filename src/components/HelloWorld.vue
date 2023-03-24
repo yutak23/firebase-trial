@@ -8,7 +8,9 @@ defineProps({
 </script>
 
 <template>
-	<h1 class="bg-green">{{ msg }}</h1>
+	<div>
+		<h1 class="bg-green">{{ msg }}</h1>
+	</div>
 </template>
 
 <style scoped lang="scss"></style>

@@ -2,7 +2,7 @@ import { defineStore } from 'pinia';
 
 export default defineStore('user', {
 	state: () => ({
-		userInfo: { uid: null, email: '', firstName: '', lastName: '', logoUrl: '' }
+		userInfo: { id: null, email: '', firstName: '', lastName: '', logoUri: '' }
 	}),
 	getters: {
 		user: (state) => state.userInfo

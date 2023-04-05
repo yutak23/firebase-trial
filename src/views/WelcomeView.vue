@@ -16,15 +16,19 @@ import HelloWorld from '@/components/HelloWorld.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
+const { updateUser } = userStore;
 const { user } = storeToRefs(userStore);
 
-const isLogined = computed(() => !!user.value.uid);
+const isLogined = computed(() => !!user.value.id);
 
 if (isLogined.value) {
 	const userDocSnap = await getDoc(
-		doc(db, 'users', user.value.uid).withConverter(converter)
+		doc(db, 'users', user.value.id).withConverter(converter)
 	);
-	if (userDocSnap.exists()) router.push({ name: 'home', params: {} });
+	if (userDocSnap.exists()) {
+		updateUser(userDocSnap.data());
+		router.push({ name: 'home', params: {} });
+	}
 }
 
 onMounted(() => {
@@ -62,12 +66,13 @@ const userRegister = async () => {
 	if (valid) {
 		step.value = 2;
 
-		await setDoc(doc(db, 'users', user.value.uid).withConverter(converter), {
-			id: user.value.uid,
+		await setDoc(doc(db, 'users', user.value.id).withConverter(converter), {
+			id: user.value.id,
 			email: user.value.email,
 			firstName: firstName.value,
 			lastName: lastName.value,
-			logoUri: `https://www.gravatar.com/avatar/${md5(user.value.email)}`
+			logoUri: `https://www.gravatar.com/avatar/${md5(user.value.email)}`,
+			ownerGroupCount: 0
 		});
 
 		setTimeout(() => {

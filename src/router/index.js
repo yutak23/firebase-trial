@@ -30,7 +30,7 @@ router.beforeEach(async (to, from) => {
 	const { authStateUnsubscribeFunc } = storeToRefs(authStore);
 	const userStore = useUserStore();
 	const { user } = storeToRefs(userStore);
-	const { uid } = toRefs(user.value);
+	const { id: uid } = toRefs(user.value);
 
 	if (!authStateUnsubscribeFunc.value)
 		authStore.setAuthStateUnsubscribe(await authenticate(userStore));

@@ -12,7 +12,7 @@ const userStore = useUserStore();
 const { user } = storeToRefs(userStore);
 
 const logoutable = computed(
-	() => !!user.value.uid && router.currentRoute.value.name !== 'welcome'
+	() => !!user.value.id && router.currentRoute.value.name !== 'welcome'
 );
 const logout = async () => {
 	try {
@@ -50,3 +50,8 @@ const logout = async () => {
 		</Suspense>
 	</v-app>
 </template>
+
+<style lang="sass" scoped>
+.photos
+	color: red
+</style>

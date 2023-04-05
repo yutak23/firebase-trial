@@ -21,7 +21,7 @@ if (import.meta.env.MODE === 'localdev')
 
 const db = getFirestore(app);
 if (import.meta.env.MODE === 'localdev')
-	connectFirestoreEmulator(db, 'localhost', 8081);
+	connectFirestoreEmulator(db, 'localhost', 8083);
 
 const analytics = getAnalytics(app);
 

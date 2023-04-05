@@ -5,8 +5,8 @@ const authenticate = (store) =>
 	new Promise((resolve) => {
 		onAuthStateChanged(auth, (user) => {
 			if (user) {
-				const { uid, email } = user;
-				store.updateUser({ uid, email });
+				const { uid: id, email } = user;
+				store.updateUser({ id, email });
 				resolve(user);
 			} else {
 				store.$reset();

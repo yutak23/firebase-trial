@@ -1,7 +1,14 @@
 import functions from 'firebase-functions';
 import admin from 'firebase-admin';
+import camelcaseKeys from 'camelcase-keys';
+import snakecaseKeys from 'snakecase-keys';
+import lodash from 'lodash';
+
+const { omit } = lodash;
 
 admin.initializeApp();
+
+const db = admin.firestore();
 
 export const addMessage = functions
 	.region('asia-northeast1')
@@ -25,4 +32,67 @@ export const makeUppercase = functions
 
 		const uppercase = original.toUpperCase();
 		return snap.ref.set({ uppercase }, { merge: true });
+	});
+
+export const createGroupMemberUsers = functions
+	.region('asia-northeast1')
+	.firestore.document('/groups/{documentId}')
+	.onCreate(async (snap, context) => {
+		const {
+			params: { documentId: groupId }
+		} = context;
+		const { createdBy } = camelcaseKeys(snap.data());
+
+		const userDocRef = db.collection('users').doc(createdBy);
+		const userSnapshot = await new Promise((resolve, reject) => {
+			userDocRef
+				.get()
+				.then((v) => {
+					resolve(v);
+				})
+				.catch((e) => {
+					reject(e);
+				});
+		});
+		const user = camelcaseKeys(userSnapshot.data());
+
+		const groupMemberUsersDocRef = db
+			.collection('groups')
+			.doc(groupId)
+			.collection('member_users')
+			.doc(user.id);
+		const groupMemberUsersSnapshot = await new Promise((resolve, reject) => {
+			groupMemberUsersDocRef
+				.get()
+				.then((v) => {
+					resolve(v);
+				})
+				.catch((e) => {
+					reject(e);
+				});
+		});
+
+		// DBへのアクセス削減のためのチェック（冪等にはなっているのでこの分岐なしでも問題はない）
+		if (groupMemberUsersSnapshot.exists) {
+			functions.logger.info(
+				'[skip] add group member_users',
+				`groupId: ${groupId}`,
+				`userId: ${user.id}`
+			);
+			return null;
+		}
+
+		functions.logger.info(
+			'add group member_users',
+			`groupId: ${groupId}`,
+			`userId: ${user.id}`
+		);
+
+		return groupMemberUsersDocRef.set(
+			snakecaseKeys(omit(user, ['ownerGroupCount']))
+		);
+		// 以下の実装でも同じ
+		// return db
+		// 	.doc(`groups/${groupId}/member_users/${user.id}`)
+		// 	.set(snakecaseKeys(omit(user, ['ownerGroupCount'])));
 	});

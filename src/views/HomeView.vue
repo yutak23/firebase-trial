@@ -52,6 +52,7 @@ if (user.value.id) {
 		doc(db, 'users', user.value.id).withConverter(converter)
 	);
 	if (!userDocSnap.exists()) router.push({ name: 'welcome', params: {} });
+
 	updateUser(userDocSnap.data());
 	await getGroups();
 }

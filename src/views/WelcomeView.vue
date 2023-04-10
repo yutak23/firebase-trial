@@ -47,7 +47,7 @@ onMounted(() => {
 			callbacks: {
 				// eslint-disable-next-line no-unused-vars
 				signInSuccessWithAuthResult(authResult, redirectUrl) {
-					router.push({ name: 'home', params: {} });
+					router.push({ name: 'welcome', params: {} });
 					return false;
 				}
 			}

@@ -1,1 +1,9 @@
-{ "app": { "title": "ビューティファイ" } }
+{
+	"app": { "title": "ビューティファイ" },
+	"groups": {
+		"add_book_data_dialog": {
+			"amount": { "prefix": "¥" },
+			"category": { "food_cost": "食費" }
+		}
+	}
+}

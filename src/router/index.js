@@ -5,6 +5,7 @@ import useAuthStore from '@/stores/auth';
 import useUserStore from '@/stores/user';
 import { authenticate } from '@/firebase/auth';
 import HomeView from '@/views/HomeView.vue';
+import GroupView from '@/views/GroupView.vue';
 import WelcomeView from '@/views/WelcomeView.vue';
 
 const router = createRouter({
@@ -14,6 +15,12 @@ const router = createRouter({
 			path: '/',
 			name: 'home',
 			component: HomeView,
+			meta: { requiresAuth: true }
+		},
+		{
+			path: '/groups/:groupId',
+			name: 'groups',
+			component: GroupView,
 			meta: { requiresAuth: true }
 		},
 		{

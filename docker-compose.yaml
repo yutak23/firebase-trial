@@ -1,0 +1,12 @@
+version: '3.9'
+services:
+  bq:
+    image: ghcr.io/goccy/bigquery-emulator:latest
+    container_name: bq-emulator
+    ports:
+      - 9050:9050
+    working_dir: /work
+    volumes:
+      - ./tests/data/testdata.yaml:/work/testdata.yaml
+    command: |
+      --project=fir-cloud-functions-trial --data-from-yaml=./testdata.yaml

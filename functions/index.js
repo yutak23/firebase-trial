@@ -3,12 +3,17 @@ import admin from 'firebase-admin';
 import camelcaseKeys from 'camelcase-keys';
 import snakecaseKeys from 'snakecase-keys';
 import lodash from 'lodash';
+import { BigQuery } from '@google-cloud/bigquery';
 
 const { omit } = lodash;
+const isLocal = process.env.NODE_ENV === 'local';
 
 admin.initializeApp();
 
 const db = admin.firestore();
+const bigquery = isLocal
+	? new BigQuery({ apiEndpoint: 'http://localhost:9050' })
+	: new BigQuery();
 
 export const addMessage = functions
 	.region('asia-northeast1')
@@ -95,4 +100,19 @@ export const createGroupMemberUsers = functions
 		// return db
 		// 	.doc(`groups/${groupId}/member_users/${user.id}`)
 		// 	.set(snakecaseKeys(omit(user, ['ownerGroupCount'])));
+	});
+
+// 検証用 テンポラリー
+export const testQuery = functions
+	.region('asia-northeast1')
+	.https.onRequest(async (req, res) => {
+		const [result] = await bigquery.query({
+			query: `SELECT * FROM firestore_export.users_raw_latest`
+		});
+		functions.logger.log(
+			`SELECT * FROM firestore_export.users_raw_latest`,
+			result
+		);
+
+		res.json({ result });
 	});

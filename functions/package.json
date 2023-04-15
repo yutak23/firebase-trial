@@ -16,6 +16,7 @@
 	},
 	"main": "index.js",
 	"dependencies": {
+		"@google-cloud/bigquery": "^6.2.0",
 		"camelcase-keys": "^8.0.2",
 		"firebase-admin": "^11.5.0",
 		"firebase-functions": "^4.2.0",

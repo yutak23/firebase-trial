@@ -2,6 +2,11 @@ import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import {
+	initializeAppCheck,
+	ReCaptchaV3Provider,
+	getToken
+} from 'firebase/app-check';
 
 const firebaseConfig = {
 	apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
@@ -22,6 +27,21 @@ if (import.meta.env.MODE === 'localdev')
 const db = getFirestore(app);
 if (import.meta.env.MODE === 'localdev')
 	connectFirestoreEmulator(db, 'localhost', 8083);
+
+if (import.meta.env.DEV) window.self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
+const appCheck = initializeAppCheck(app, {
+	provider: new ReCaptchaV3Provider(
+		import.meta.env.VITE_FIREBASE_RECAPTCHA_SITEKEY
+	),
+	isTokenAutoRefreshEnabled: true
+});
+getToken(appCheck)
+	.then(() => {
+		console.log('AppCheck:Success');
+	})
+	.catch((error) => {
+		console.log(error.message);
+	});
 
 const analytics = getAnalytics(app);
 

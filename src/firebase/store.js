@@ -7,6 +7,10 @@ const converter = {
 	},
 	fromFirestore(snapshot, options) {
 		const data = snapshot.data(options);
+
+		Object.keys(data).forEach((key) => {
+			if (key === 'date') data.date = data.date.toDate();
+		});
 		return camelcaseKeys(data);
 	}
 };

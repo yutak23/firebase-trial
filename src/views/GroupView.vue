@@ -2,7 +2,16 @@
 import { ref, reactive, computed } from 'vue';
 import { useRouter } from 'vue-router';
 import { useI18n } from 'vue-i18n';
-import { collection, getDocs } from 'firebase/firestore';
+import {
+	doc,
+	collection,
+	getDocs,
+	setDoc,
+	addDoc,
+	where,
+	query,
+	orderBy
+} from 'firebase/firestore';
 import { DateTime } from 'luxon';
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
@@ -18,14 +27,14 @@ const {
 
 const bottomNavigation = ref(false);
 
-const addbookDataDialog = ref(false);
+const bookDataDialog = ref(false);
 const datePickDialog = ref(false);
 const datepicker = ref(null);
-const openAddbookDataDialog = () => {
-	addbookDataDialog.value = true;
+const openBookDataDialog = () => {
+	bookDataDialog.value = true;
 	bottomNavigation.value = null;
 };
-const openDialog = () => {
+const openDatePickDialog = () => {
 	datePickDialog.value = true;
 	setTimeout(() => {
 		datepicker.value.openMenu();
@@ -34,55 +43,305 @@ const openDialog = () => {
 const onClickOutside = () => {};
 
 const form = ref(null);
-const date = ref(new Date());
-const price = ref(null);
-const cateory = ref(null);
-const payer = ref(null);
-const memo = ref(null);
-const memberUsers = reactive([]);
+const book = reactive({
+	id: null,
+	date: new Date(),
+	price: null,
+	cateory: null,
+	payer: null,
+	memo: null
+});
+const memberUserList = reactive([]);
+const groupUsers = reactive([]);
 const dispalyDate = computed(() =>
-	DateTime.fromJSDate(date.value).toFormat('yyyy-MM-dd')
+	DateTime.fromJSDate(book.date).toFormat('yyyy-MM-dd')
 );
 const cateories = computed(() => [
 	{
-		id: 'food_cost',
-		title: t('groups.add_book_data_dialog.category.food_cost'),
-		value: 'food_cost'
+		id: 'food_expenses',
+		title: t('groups.add_book_data_dialog.category.food_expenses'),
+		value: 'food_expenses'
+	},
+	{
+		id: 'commodity_expenses',
+		title: t('groups.add_book_data_dialog.category.commodity_expenses'),
+		value: 'commodity_expenses'
+	},
+	{
+		id: 'medical_expense',
+		title: t('groups.add_book_data_dialog.category.medical_expense'),
+		value: 'medical_expense'
+	},
+	{
+		id: 'clothing_expenses',
+		title: t('groups.add_book_data_dialog.category.clothing_expenses'),
+		value: 'clothing_expenses'
+	},
+	{
+		id: 'transportation_expenses',
+		title: t('groups.add_book_data_dialog.category.transportation_expenses'),
+		value: 'transportation_expenses'
+	},
+	{
+		id: 'rent_expenses',
+		title: t('groups.add_book_data_dialog.category.rent_expenses'),
+		value: 'rent_expenses'
+	},
+	{
+		id: 'utilities_expense',
+		title: t('groups.add_book_data_dialog.category.utilities_expense'),
+		value: 'utilities_expense'
 	}
 ]);
-const update = () => {
-	console.log(cateory);
+const create = () => {
+	Object.keys(book).forEach((key) => {
+		if (key === 'date') {
+			book.date = new Date();
+			return;
+		}
+		book[key] = null;
+	});
+	openBookDataDialog();
 };
 
-const memberUsersRef = collection(
-	db,
-	'groups',
-	groupId,
-	'member_users'
-).withConverter(converter);
-const memberUsersSnaps = await getDocs(memberUsersRef);
-memberUsersSnaps.forEach((snap) => {
-	console.log(snap.id, snap.data());
-	const { id, firstName } = snap.data();
-	memberUsers.push({
-		id,
-		title: firstName,
-		value: id
+const initMemberUserList = async () => {
+	const memberUserListRef = collection(
+		db,
+		'groups',
+		groupId,
+		'member_users'
+	).withConverter(converter);
+
+	const memberUserListSnaps = await getDocs(memberUserListRef);
+	memberUserListSnaps.forEach((snap) => {
+		const { id, firstName } = snap.data();
+		memberUserList.push({
+			id,
+			title: firstName,
+			value: id
+		});
+		groupUsers.push({ id, firstName });
 	});
+	if (memberUserList.length > 1)
+		memberUserList.push({
+			id: 'joint',
+			title: t('groups.add_book_data_dialog.member.joint'),
+			value: 'joint'
+		});
+};
+
+const overlay = ref(false);
+const displayLoading = () => {
+	overlay.value = true;
+};
+const closeLoading = () => {
+	overlay.value = false;
+};
+const nowDatetime = DateTime.local();
+const selectedYear = ref(nowDatetime.year);
+const selectedMonth = ref(nowDatetime.month);
+const currentMonthBooks = reactive([]);
+const displayPrice = computed(
+	() => (number) =>
+		new Intl.NumberFormat('ja-JP', {
+			style: 'currency',
+			currency: 'JPY'
+		}).format(number)
+);
+const dispalyPayer = computed(() => (userId) => {
+	const payerUser = groupUsers
+		.filter((memberUser) => memberUser.id === userId)
+		.shift();
+	return payerUser ? payerUser.firstName : null;
 });
+const dispalyListDate = computed(
+	() => (jsDate) => DateTime.fromJSDate(jsDate).toFormat('yyyy-MM-dd')
+);
+const getAllCurrentData = async (options = {}) => {
+	if (options.loading) displayLoading();
+	currentMonthBooks.length = 0;
+
+	const groupsRef = collection(db, 'groups', groupId, 'books').withConverter(
+		converter
+	);
+	const targetDatetime = DateTime.fromFormat(
+		`${selectedYear.value}-${selectedMonth.value}`,
+		'yyyy-M'
+	);
+	const q = query(
+		groupsRef,
+		where('date', '>=', targetDatetime.startOf('month').toJSDate()),
+		where('date', '<=', targetDatetime.endOf('month').toJSDate()),
+		orderBy('date')
+	); // これでも where('date', '>=', Timestamp.fromDate(new Date('2023-04-19'))) と同じ
+	const querySnapshot = await getDocs(q);
+	querySnapshot.forEach((docData) => {
+		console.log(docData.id, ' => ', docData.data());
+		currentMonthBooks.push({ id: docData.id, ...docData.data() });
+	});
+
+	if (options.loading) closeLoading();
+};
+const edit = (v) => {
+	book.id = v.id;
+	book.date = v.date;
+	book.price = v.price;
+	book.cateory = v.cateory;
+	book.payer = v.payer;
+	book.memo = v.memo;
+
+	openBookDataDialog();
+};
+
+const dialogOverlay = ref(false);
+const displayDialogLoading = () => {
+	dialogOverlay.value = true;
+};
+const closeDialogLoading = () => {
+	dialogOverlay.value = false;
+};
+const register = async () => {
+	const { valid } = await form.value.validate();
+
+	if (valid) {
+		displayDialogLoading();
+
+		const data = {
+			groupId,
+			date: book.date, // JS Dateでfirestore.Timestampに変換される
+			price: Number.parseInt(book.price, 10),
+			cateory: book.cateory,
+			payer: book.payer,
+			memo: book.memo
+		};
+		if (book.id)
+			await setDoc(
+				doc(db, 'groups', groupId, 'books', book.id).withConverter(converter),
+				data
+			);
+		else
+			await addDoc(
+				collection(db, 'groups', groupId, 'books').withConverter(converter),
+				data
+			);
+
+		await getAllCurrentData({ loading: false });
+
+		bookDataDialog.value = false;
+		closeDialogLoading();
+	}
+};
+
+await initMemberUserList();
+await getAllCurrentData();
 </script>
 
 <template>
 	<v-container>
-		aaa
+		<v-overlay :model-value="overlay" class="align-center justify-center">
+			<v-progress-circular color="primary" indeterminate size="64" />
+		</v-overlay>
+		<v-toolbar dense floating>
+			<v-container>
+				<v-row>
+					<v-col cols="4">
+						<v-select
+							v-model="selectedYear"
+							density="compact"
+							hide-details
+							hide-selected
+							label="年"
+							:items="['2020', '2021', '2022', '2023', '2024', '2025']"
+							@update:modelValue="getAllCurrentData({ loading: true })"
+						/>
+					</v-col>
+					<v-col cols="4">
+						<v-select
+							v-model="selectedMonth"
+							density="compact"
+							hide-details
+							hide-selected
+							label="月"
+							:items="[
+								'1',
+								'2',
+								'3',
+								'4',
+								'5',
+								'6',
+								'7',
+								'8',
+								'9',
+								'10',
+								'11',
+								'12'
+							]"
+							@update:modelValue="getAllCurrentData({ loading: true })"
+						/>
+					</v-col>
+				</v-row>
+			</v-container>
+		</v-toolbar>
+
+		<v-list lines="three">
+			<template v-for="(item, i) in currentMonthBooks" :key="i">
+				<v-list-item class="pa-2">
+					<template v-slot:prepend>
+						<div style="width: 80px">
+							<v-chip size="small">
+								{{ $t(`groups.add_book_data_dialog.category.${item.cateory}`) }}
+							</v-chip>
+						</div>
+					</template>
+
+					<v-list-item-title class="pb-1 pl-2">
+						{{ displayPrice(item.price) }}
+					</v-list-item-title>
+					<v-list-item-subtitle class="pb-1 pl-2">
+						メモ : {{ item.memo }}
+					</v-list-item-subtitle>
+					<v-list-item-subtitle class="pl-2">
+						<v-icon
+							v-if="dispalyPayer(item.payer) !== null"
+							icon="mdi-account-circle"
+							theme="light"
+						/>
+						<v-icon v-else icon="mdi-account-multiple" theme="light" />
+
+						<span v-if="dispalyPayer(item.payer) !== null" class="text-body-2">
+							{{ dispalyPayer(item.payer) }}
+						</span>
+						<span v-else class="text-body-2">
+							{{ $t('groups.add_book_data_dialog.member.joint') }}
+						</span>
+						<span class="ml-2">{{ dispalyListDate(item.date) }}</span>
+					</v-list-item-subtitle>
+
+					<template #append>
+						<v-list-item-action>
+							<v-btn size="x-small" icon="mdi-pencil" @click="edit(item)" />
+						</v-list-item-action>
+					</template>
+				</v-list-item>
+
+				<v-divider v-if="currentMonthBooks.length - 1 > i" />
+			</template>
+		</v-list>
+
 		<v-bottom-navigation v-model="bottomNavigation" density="compact">
-			<v-btn @click="openAddbookDataDialog">
+			<v-btn @click="create">
 				<v-icon>mdi-book-plus</v-icon>
 				追加
 			</v-btn>
 		</v-bottom-navigation>
 
-		<v-dialog v-model="addbookDataDialog" persistent fullscreen>
+		<v-dialog v-model="bookDataDialog" persistent fullscreen>
+			<v-overlay
+				:model-value="dialogOverlay"
+				class="align-center justify-center"
+			>
+				<v-progress-circular color="primary" indeterminate size="64" />
+			</v-overlay>
 			<v-card>
 				<v-card-title> 新しく家計簿に登録する </v-card-title>
 				<v-card-text>
@@ -95,12 +354,12 @@ memberUsersSnaps.forEach((snap) => {
 									readonly
 									variant="underlined"
 									append-icon="mdi-calendar"
-									@click:append="openDialog"
+									@click:append="openDatePickDialog"
 								/>
 							</v-col>
 							<v-col cols="12">
 								<v-text-field
-									v-model="price"
+									v-model="book.price"
 									label="金額"
 									variant="underlined"
 									:rules="[(v) => !!v || 'Item is required']"
@@ -109,9 +368,9 @@ memberUsersSnaps.forEach((snap) => {
 									:prefix="$t('groups.add_book_data_dialog.amount.prefix')"
 								/>
 							</v-col>
-							<v-col cols="6">
+							<v-col cols="7">
 								<v-select
-									v-model="cateory"
+									v-model="book.cateory"
 									chips
 									:items="cateories"
 									item-title="title"
@@ -120,28 +379,26 @@ memberUsersSnaps.forEach((snap) => {
 									:rules="[(v) => !!v || 'Item is required']"
 									validate-on="blur"
 									clearable
-									@update:model-value="update"
 								>
 								</v-select>
 							</v-col>
-							<v-col cols="6">
+							<v-col cols="5">
 								<v-select
-									v-model="payer"
+									v-model="book.payer"
 									chips
-									:items="memberUsers"
+									:items="memberUserList"
 									item-title="title"
 									item-value="value"
 									label="支払者"
 									:rules="[(v) => !!v || 'Item is required']"
 									validate-on="blur"
 									clearable
-									@update:model-value="update"
 								>
 								</v-select>
 							</v-col>
 							<v-col cols="12" class="pb-1">
 								<v-text-field
-									v-model="memo"
+									v-model="book.memo"
 									label="メモ"
 									variant="underlined"
 									clearable
@@ -165,7 +422,7 @@ memberUsersSnaps.forEach((snap) => {
 				<v-card-text class="d-flex justify-center">
 					<VueDatePicker
 						ref="datepicker"
-						v-model="date"
+						v-model="book.date"
 						:locale="$i18n.locale"
 						:enable-time-picker="false"
 						:on-click-outside="onClickOutside"
@@ -182,3 +439,5 @@ memberUsersSnaps.forEach((snap) => {
 		</v-dialog>
 	</v-container>
 </template>
+
+<style scoped lang="sass"></style>

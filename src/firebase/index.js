@@ -26,7 +26,7 @@ if (import.meta.env.MODE === 'localdev')
 
 const db = getFirestore(app);
 if (import.meta.env.MODE === 'localdev')
-	connectFirestoreEmulator(db, 'localhost', 8083);
+	connectFirestoreEmulator(db, 'localhost', 8084);
 
 if (import.meta.env.DEV) window.self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 const appCheck = initializeAppCheck(app, {

@@ -30,11 +30,28 @@ service cloud.firestore {
         allow update, delete: if false; // functionsからのみ操作可能
         // allow update: if request.auth != null && request.auth.uid == userId; // <- このルールでフロントから更新を許可してもいい
       }
+
+      match /books/{bookId} {
+        function isValidGroupIdIfContain() {
+          return "group_id" in request.resource.data && request.resource.data.group_id == groupId;
+        }
+
+        allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid));
+        allow write: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid)) && isValidGroupIdIfContain();
+      }
     }
 
     // https://firebase.google.com/docs/firestore/security/rules-query?hl=ja#secure_collection_group_queries_based_on_a_field
     match /{path=**}/member_users/{userId} {
-      allow read: if isSignedIn() && request.auth.uid == resource.data.id;
+      allow read: if false;
+      // allow read: if isSignedIn() && request.auth.uid == resource.data.id; // 今回はフロントからreadする事はない
+    }
+
+    // 今回はcollection_groupsでbooksを取得する事はいのでfalseにしているが、必要なら以下のようになるだろう
+    // このルールではbooksコレクションのドキュメントのフィールドにgroupIdが必須になる
+    match /{path=**}/books/{bookId} {
+      allow read: if false;
+      // allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(resource.data.groupId)/member_users/$(request.auth.uid));
     }
 
     match /{document=**} {

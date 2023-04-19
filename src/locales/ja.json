@@ -3,7 +3,16 @@
 	"groups": {
 		"add_book_data_dialog": {
 			"amount": { "prefix": "¥" },
-			"category": { "food_cost": "食費" }
+			"category": {
+				"food_expenses": "食費",
+				"commodity_expenses": "日用品費",
+				"medical_expense": "医療費",
+				"clothing_expenses": "服飾費",
+				"transportation_expenses": "交通費",
+				"rent_expenses": "家賃",
+				"utilities_expense": "水道光熱費"
+			},
+			"member": { "joint": "共同" }
 		}
 	}
 }

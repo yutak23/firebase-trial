@@ -36,15 +36,19 @@ service cloud.firestore {
           return "group_id" in request.resource.data && request.resource.data.group_id == groupId;
         }
 
+        function isValidKeys() {
+          return request.resource.data.keys().hasOnly(["group_id","date","price","cateory","payer","memo"])
+        }
+
         allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid));
-        allow write: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid)) && isValidGroupIdIfContain();
+        allow create, update: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid)) && isValidGroupIdIfContain() && isValidKeys();
+        allow delete:if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid))
       }
     }
 
     // https://firebase.google.com/docs/firestore/security/rules-query?hl=ja#secure_collection_group_queries_based_on_a_field
     match /{path=**}/member_users/{userId} {
-      allow read: if false;
-      // allow read: if isSignedIn() && request.auth.uid == resource.data.id; // 今回はフロントからreadする事はない
+      allow read: if isSignedIn() && request.auth.uid == resource.data.id;
     }
 
     // 今回はcollection_groupsでbooksを取得する事はいのでfalseにしているが、必要なら以下のようになるだろう

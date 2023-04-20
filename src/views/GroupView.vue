@@ -10,7 +10,8 @@ import {
 	addDoc,
 	where,
 	query,
-	orderBy
+	orderBy,
+	deleteDoc
 } from 'firebase/firestore';
 import { DateTime } from 'luxon';
 import VueDatePicker from '@vuepic/vue-datepicker';
@@ -192,6 +193,14 @@ const edit = (v) => {
 
 	openBookDataDialog();
 };
+const deleteData = async (v) => {
+	displayLoading();
+
+	await deleteDoc(doc(db, 'groups', groupId, 'books', v.id));
+	await getAllCurrentData({ loading: false });
+
+	closeLoading();
+};
 
 const dialogOverlay = ref(false);
 const displayDialogLoading = () => {
@@ -262,20 +271,7 @@ await getAllCurrentData();
 							hide-details
 							hide-selected
 							label="月"
-							:items="[
-								'1',
-								'2',
-								'3',
-								'4',
-								'5',
-								'6',
-								'7',
-								'8',
-								'9',
-								'10',
-								'11',
-								'12'
-							]"
+							:items="[...Array(12)].map((_, i) => i + 1)"
 							@update:modelValue="getAllCurrentData({ loading: true })"
 						/>
 					</v-col>
@@ -320,6 +316,12 @@ await getAllCurrentData();
 					<template #append>
 						<v-list-item-action>
 							<v-btn size="x-small" icon="mdi-pencil" @click="edit(item)" />
+							<v-btn
+								class="ml-2"
+								size="x-small"
+								icon="mdi-delete"
+								@click="deleteData(item)"
+							/>
 						</v-list-item-action>
 					</template>
 				</v-list-item>

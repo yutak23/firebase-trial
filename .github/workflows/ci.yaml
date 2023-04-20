@@ -2,12 +2,15 @@ name: ci
 
 on:
   push:
-    branches: [main]
-
+    branches:
+      - main
+  pull_request:
+    branches:
+      - '**'
   workflow_dispatch:
 
 jobs:
-  test-on-ci:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3

@@ -38,16 +38,24 @@ const logout = async () => {
 			</template>
 		</v-app-bar>
 
-		<Suspense>
-			<template #default>
-				<v-main class="bg-grey-lighten-5">
-					<router-view />
-				</v-main>
-			</template>
-			<template #fallback>
-				<span>Loading...</span>
-			</template>
-		</Suspense>
+		<v-main class="bg-grey-lighten-5">
+			<!-- https://tech.yappli.io/entry/suspense-with-routerview -->
+			<RouterView v-slot="{ Component }">
+				<template v-if="Component">
+					<Suspense timeout="0">
+						<template #default>
+							<component :is="Component" />
+						</template>
+
+						<template #fallback>
+							<v-container class="d-flex justify-center align-center">
+								<v-progress-circular color="primary" indeterminate size="64" />
+							</v-container>
+						</template>
+					</Suspense>
+				</template>
+			</RouterView>
+		</v-main>
 	</v-app>
 </template>
 

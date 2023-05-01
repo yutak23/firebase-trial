@@ -19,12 +19,21 @@ import '@vuepic/vue-datepicker/dist/main.css';
 
 import { db } from '@/firebase';
 import { converter } from '@/firebase/store';
+import { fetchGroupMembers } from '@/service/group-service';
 
 const { t } = useI18n();
 const router = useRouter();
 const {
 	params: { groupId }
 } = router.currentRoute.value;
+
+const overlay = ref(false);
+const displayLoading = () => {
+	overlay.value = true;
+};
+const closeLoading = () => {
+	overlay.value = false;
+};
 
 const bottomNavigation = ref(false);
 
@@ -105,39 +114,23 @@ const create = () => {
 	openBookDataDialog();
 };
 
-const initMemberUserList = async () => {
-	const memberUserListRef = collection(
-		db,
-		'groups',
-		groupId,
-		'member_users'
-	).withConverter(converter);
-
-	const memberUserListSnaps = await getDocs(memberUserListRef);
-	memberUserListSnaps.forEach((snap) => {
-		const { id, firstName } = snap.data();
-		memberUserList.push({
-			id,
-			title: firstName,
-			value: id
-		});
-		groupUsers.push({ id, firstName });
+const groupMembers = await fetchGroupMembers({ groupId });
+groupMembers.forEach((v) => {
+	const { id, firstName } = v;
+	memberUserList.push({
+		id,
+		title: firstName,
+		value: id
 	});
-	if (memberUserList.length > 1)
-		memberUserList.push({
-			id: 'joint',
-			title: t('groups.add_book_data_dialog.member.joint'),
-			value: 'joint'
-		});
-};
+	groupUsers.push({ id, firstName });
+});
+if (memberUserList.length > 1)
+	memberUserList.push({
+		id: 'joint',
+		title: t('groups.add_book_data_dialog.member.joint'),
+		value: 'joint'
+	});
 
-const overlay = ref(false);
-const displayLoading = () => {
-	overlay.value = true;
-};
-const closeLoading = () => {
-	overlay.value = false;
-};
 const nowDatetime = DateTime.local();
 const selectedYear = ref(nowDatetime.year);
 const selectedMonth = ref(nowDatetime.month);
@@ -241,7 +234,6 @@ const register = async () => {
 	}
 };
 
-await initMemberUserList();
 await getAllCurrentData();
 </script>
 
@@ -331,9 +323,19 @@ await getAllCurrentData();
 		</v-list>
 
 		<v-bottom-navigation v-model="bottomNavigation" density="compact">
+			<v-btn @click="router.push({ name: 'home' })">
+				<v-icon>mdi-home</v-icon>
+				Topページへ
+			</v-btn>
 			<v-btn @click="create">
 				<v-icon>mdi-book-plus</v-icon>
-				追加
+				招待
+			</v-btn>
+			<v-btn
+				@click="router.push({ name: 'groupsSettings', params: { groupId } })"
+			>
+				<v-icon>mdi-file-cog-outline</v-icon>
+				管理
 			</v-btn>
 		</v-bottom-navigation>
 

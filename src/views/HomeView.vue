@@ -14,6 +14,7 @@ import {
 } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import snakecaseKeys from 'snakecase-keys';
+import md5 from 'crypto-js/md5';
 
 import { db } from '@/firebase';
 import { converter } from '@/firebase/store';
@@ -37,7 +38,6 @@ const getGroups = async () => {
 	querySnapshots.forEach((querySnapshot) => {
 		groupDocPaths.push(querySnapshot.ref.parent.parent.path);
 	});
-
 	await Promise.all(
 		groupDocPaths.map(async (groupDocPath) => {
 			const groupRef = doc(db, groupDocPath).withConverter(converter);
@@ -92,7 +92,7 @@ const createGroup = async () => {
 							db,
 							docRef.path,
 							'member_users',
-							auth.currentUser.uid
+							md5(auth.currentUser.email).toString()
 						).withConverter(converter),
 						user.value
 					);
@@ -142,11 +142,16 @@ const createGroup = async () => {
 			</v-btn>
 		</v-bottom-navigation>
 
-		<v-dialog v-model="createGroupDialog" persistent fullscreen>
+		<v-dialog
+			v-model="createGroupDialog"
+			persistent
+			:fullscreen="$vuetify.display.name === 'xs'"
+			transition="dialog-bottom-transition"
+		>
 			<v-card>
 				<v-card-title>グループを作成</v-card-title>
-				<v-form ref="form">
-					<v-container>
+				<v-card-text>
+					<v-form ref="form">
 						<v-row>
 							<v-col cols="12">
 								<v-text-field
@@ -158,8 +163,8 @@ const createGroup = async () => {
 								/>
 							</v-col>
 						</v-row>
-					</v-container>
-				</v-form>
+					</v-form>
+				</v-card-text>
 				<v-card-actions>
 					<v-spacer></v-spacer>
 					<v-btn @click="createGroupDialog = false"> キャンセル </v-btn>

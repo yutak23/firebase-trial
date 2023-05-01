@@ -3,6 +3,8 @@ import admin from 'firebase-admin';
 import camelcaseKeys from 'camelcase-keys';
 import snakecaseKeys from 'snakecase-keys';
 import lodash from 'lodash';
+// eslint-disable-next-line import/extensions
+import md5 from 'crypto-js/md5.js';
 import { BigQuery } from '@google-cloud/bigquery';
 
 const { omit } = lodash;
@@ -14,6 +16,20 @@ const db = admin.firestore();
 const bigquery = isLocal
 	? new BigQuery({ apiEndpoint: 'http://localhost:9050' })
 	: new BigQuery();
+
+const converter = {
+	toFirestore(obj) {
+		return snakecaseKeys(obj);
+	},
+	fromFirestore(snapshot, options) {
+		const data = snapshot.data(options);
+
+		Object.keys(data).forEach((key) => {
+			if (key === 'date') data.date = data.date.toDate();
+		});
+		return camelcaseKeys(data);
+	}
+};
 
 export const addMessage = functions
 	.region('asia-northeast1')
@@ -65,7 +81,7 @@ export const createGroupMemberUsers = functions
 			.collection('groups')
 			.doc(groupId)
 			.collection('member_users')
-			.doc(user.id);
+			.doc(md5(user.email).toString());
 		const groupMemberUsersSnapshot = await new Promise((resolve, reject) => {
 			groupMemberUsersDocRef
 				.get()
@@ -82,7 +98,7 @@ export const createGroupMemberUsers = functions
 			functions.logger.info(
 				'[skip] add group member_users',
 				`groupId: ${groupId}`,
-				`userId: ${user.id}`
+				`userId: ${md5(user.email).toString()}`
 			);
 			return null;
 		}
@@ -90,7 +106,7 @@ export const createGroupMemberUsers = functions
 		functions.logger.info(
 			'add group member_users',
 			`groupId: ${groupId}`,
-			`userId: ${user.id}`
+			`userId: ${md5(user.email).toString()}`
 		);
 
 		return groupMemberUsersDocRef.set(
@@ -100,6 +116,106 @@ export const createGroupMemberUsers = functions
 		// return db
 		// 	.doc(`groups/${groupId}/member_users/${user.id}`)
 		// 	.set(snakecaseKeys(omit(user, ['ownerGroupCount'])));
+	});
+
+export const replyInvite = functions
+	.region('asia-northeast1')
+	.runWith({ enforceAppCheck: true })
+	.https.onCall(async (data, context) => {
+		if (context.app === undefined) {
+			throw new functions.https.HttpsError(
+				'failed-precondition',
+				'The function must be called from an App Check verified app.'
+			);
+		}
+
+		// TODO middlewareのような処理で大体可能か？調査
+		if (
+			!('groupId' in data) ||
+			!('inviteId' in data) ||
+			!('type' in data) ||
+			!['accept', 'reject'].includes(data.type)
+		)
+			throw new functions.https.HttpsError(
+				'invalid-argument',
+				'invalid request.'
+			);
+
+		const { groupId, inviteId, type } = data;
+		const {
+			token: { uid, email }
+		} = context.auth;
+
+		if (inviteId !== md5(email).toString())
+			throw new functions.https.HttpsError('not-found', 'invite not found');
+
+		const groupInviteRef = db
+			.collection('groups')
+			.doc(groupId)
+			.collection('invites')
+			.doc(inviteId)
+			.withConverter(converter);
+		const groupInvitesSnap = await groupInviteRef.get();
+
+		if (!groupInvitesSnap.exists)
+			throw new functions.https.HttpsError('not-found', 'invite not found');
+
+		if (type === 'accept') {
+			try {
+				await db.runTransaction(async (t) => {
+					const userRef = await db
+						.collection('users')
+						.doc(uid)
+						.withConverter(converter);
+					const usersSnap = await t.get(userRef);
+					const user = usersSnap.data();
+
+					const groupMemberUsersDocRef = db
+						.collection('groups')
+						.doc(groupId)
+						.collection('member_users')
+						.doc(md5(email).toString())
+						.withConverter(converter);
+					await t.create(
+						groupMemberUsersDocRef,
+						snakecaseKeys(omit(user, ['ownerGroupCount']))
+					);
+
+					await t.delete(groupInviteRef, { exists: true });
+
+					const groupInviteHistoryRef = db
+						.collection('groups')
+						.doc(groupId)
+						.collection('invite_histories')
+						.doc()
+						.withConverter(converter);
+					await t.create(groupInviteHistoryRef, {
+						...groupInvitesSnap.data(),
+						status: 'accept'
+					});
+				});
+
+				functions.logger.info(
+					'accept transaction success',
+					`groupId: ${groupId}`,
+					`invitedUserEmail: ${email}`
+				);
+			} catch (e) {
+				// TODO エラー時の実装を修正
+				functions.logger.error(
+					'accept transaction failure',
+					`groupId: ${groupId}`,
+					`invitedUserEmail: ${email}`,
+					e
+				);
+			}
+
+			return { type };
+		}
+
+		// TODO rejectの場合を実装
+
+		return { type };
 	});
 
 // 検証用 テンポラリー

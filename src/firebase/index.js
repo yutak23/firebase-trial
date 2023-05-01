@@ -2,6 +2,7 @@ import { initializeApp } from 'firebase/app';
 import { getAnalytics } from 'firebase/analytics';
 import { getAuth, connectAuthEmulator } from 'firebase/auth';
 import { getFirestore, connectFirestoreEmulator } from 'firebase/firestore';
+import { getFunctions, connectFunctionsEmulator } from 'firebase/functions';
 import {
 	initializeAppCheck,
 	ReCaptchaV3Provider,
@@ -28,6 +29,10 @@ const db = getFirestore(app);
 if (import.meta.env.MODE === 'localdev')
 	connectFirestoreEmulator(db, 'localhost', 8083);
 
+const functions = getFunctions(app, 'asia-northeast1');
+if (import.meta.env.MODE === 'localdev')
+	connectFunctionsEmulator(functions, 'localhost', 5001);
+
 if (import.meta.env.DEV) window.self.FIREBASE_APPCHECK_DEBUG_TOKEN = true;
 const appCheck = initializeAppCheck(app, {
 	provider: new ReCaptchaV3Provider(
@@ -45,4 +50,4 @@ getToken(appCheck)
 
 const analytics = getAnalytics(app);
 
-export { auth, db, analytics };
+export { auth, db, functions, analytics };

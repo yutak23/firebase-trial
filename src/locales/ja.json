@@ -1,5 +1,14 @@
 {
 	"app": { "title": "ビューティファイ" },
+	"accounts": {
+		"invites": {
+			"confirm_dialog": {
+				"title": { "accept": "招待を受諾する", "reject": "招待を拒否する" },
+				"accept": "受諾",
+				"reject": "拒否"
+			}
+		}
+	},
 	"groups": {
 		"add_book_data_dialog": {
 			"amount": { "prefix": "¥" },
@@ -13,6 +22,13 @@
 				"utilities_expense": "水道光熱費"
 			},
 			"member": { "joint": "共同" }
+		}
+	},
+	"$vuetify": {
+		"dataFooter": {
+			"itemsPerPageText": "1ページあたりの件数：",
+			"itemsPerPageAll": "すべて",
+			"pageText": "{0}-{1} 件目 / {2}件"
 		}
 	}
 }

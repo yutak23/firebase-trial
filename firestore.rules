@@ -5,6 +5,10 @@ service cloud.firestore {
       return request.auth != null;
     }
 
+    function reqAuthEmailToMd5() {
+          return hashing.md5(request.auth.token.email).toHexString().lower();
+    }
+
     match /users/{userId} {
       function isValidOwnerGroupCountUpdate() {
         return request.resource.data.diff(resource.data).affectedKeys().hasOnly(["owner_group_count"]) && resource.data.owner_group_count + 1 == getAfter(/databases/$(database)/documents/users/$(userId)).data.owner_group_count;
@@ -20,13 +24,13 @@ service cloud.firestore {
 
     match /groups/{groupId} {
       allow create: if isSignedIn() && int(get(/databases/$(database)/documents/users/$(request.auth.uid)).data.owner_group_count) < 5 && request.resource.data.created_by == request.auth.uid;
-      allow read, update: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid));
+      allow read, update: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5()));
       allow delete: if false;
       // allow delete: if isSignedIn() && resource.data.created_by == request.auth.uid;
 
       match /member_users/{userId} {
-        allow read: if isSignedIn() && exists(/$(request.path)/$(request.auth.uid)); // サブコレクションなのでここでルール設定が必要
-        allow create: if isSignedIn() && getAfter(/databases/$(database)/documents/groups/$(groupId)).data.created_by == request.auth.uid; // created_byをなくするのであればfunctionsで対応する必要がある
+        allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5())); // サブコレクションなのでここでルール設定が必要
+        allow create: if isSignedIn() && reqAuthEmailToMd5() == userId && getAfter(/databases/$(database)/documents/groups/$(groupId)).data.created_by == request.auth.uid; // created_byをなくするのであればfunctionsで対応する必要がある
         allow update, delete: if false; // functionsからのみ操作可能
         // allow update: if request.auth != null && request.auth.uid == userId; // <- このルールでフロントから更新を許可してもいい
       }
@@ -37,25 +41,74 @@ service cloud.firestore {
         }
 
         function isValidKeys() {
-          return request.resource.data.keys().hasOnly(["group_id","date","price","cateory","payer","memo"])
+          return request.resource.data.keys().hasAll(["group_id","date","price","cateory","payer","memo"])
         }
 
-        allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid));
-        allow create, update: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid)) && isValidGroupIdIfContain() && isValidKeys();
-        allow delete:if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(request.auth.uid))
+        allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5()));
+        allow create, update: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5())) && isValidGroupIdIfContain() && isValidKeys();
+        allow delete:if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5()))
+      }
+
+      match /invites/{inviteId} {
+        function isValidKeys() {
+          return request.resource.data.keys().hasAll(["group_id","group_name","invited_user_email","inviter_uid","inviter_first_name","inviter_last_name","inviter_logo_uri"])
+        }
+
+        function isValidInviter() {
+          return "inviter_uid" in request.resource.data && request.resource.data.inviter_uid == request.auth.uid;
+        }
+
+        function isValidInvitId() {
+          return inviteId == hashing.md5(request.resource.data.invited_user_email).toHexString().lower();
+        }
+
+        function isGroupMember() {
+          return exists(/databases/$(database)/documents/groups/$(request.resource.data.group_id)/member_users/$(reqAuthEmailToMd5()));
+        }
+
+        function isNotInvited() {
+          return !exists(/databases/$(database)/documents/groups/$(groupId)/invites/$(request.resource.id));
+        }
+
+        function isNotGroupMemberInvitedUser() {
+          let md5InvitedUserEmail = hashing.md5(request.resource.data.invited_user_email).toHexString().lower();
+          return !exists(/databases/$(database)/documents/groups/$(request.resource.data.group_id)/member_users/$(md5InvitedUserEmail));
+        }
+
+        allow create: if isSignedIn() && isValidKeys() && isValidInviter() && isValidInvitId() && isGroupMember() && isNotInvited() && isNotGroupMemberInvitedUser();
+        allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5()));
+        allow update, delete: if false; // TODO 招待取り消しを招待者ならできるを実装する
+      }
+
+      // 過去の招待履歴（リードオンリー）
+      match /invite_histories/{inviteHistoryId} {
+        allow create, update, delete: if false;
+        allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5()));
       }
     }
 
     // https://firebase.google.com/docs/firestore/security/rules-query?hl=ja#secure_collection_group_queries_based_on_a_field
+    // https://qiita.com/yuta-katayama-23/items/fc8d114606c4ad14e212#collectiongroup%E3%81%AE%E3%83%AB%E3%83%BC%E3%83%AB%E3%81%AB%E3%81%A4%E3%81%84%E3%81%A6%E3%81%AE%E8%A3%9C%E8%B6%B3
     match /{path=**}/member_users/{userId} {
       allow read: if isSignedIn() && request.auth.uid == resource.data.id;
     }
 
-    // 今回はcollection_groupsでbooksを取得する事はいのでfalseにしているが、必要なら以下のようになるだろう
+    // 今回はcollection_groupsでbooksを取得する事はないのでfalseにしているが、必要なら以下のようになるだろう
     // このルールではbooksコレクションのドキュメントのフィールドにgroupIdが必須になる
     match /{path=**}/books/{bookId} {
       allow read: if false;
-      // allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(resource.data.groupId)/member_users/$(request.auth.uid));
+      // allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(resource.data.group_id)/member_users/$(reqAuthEmailToMd5()));
+    }
+
+    // 被招待者のみread可（招待者は /groups/{groupId}/invites/* をread想定）
+    match /{path=**}/invites/{inviteId} {
+      allow read: if isSignedIn() && resource.data.invited_user_email == request.auth.token.email;
+    }
+
+    // 許可せずでもいいが、グループのメンバーであればその招待履歴をreadできるにしている
+    // query(collectionGroup(db, 'invite_histories'), where('group_id', '==', groupId)) <- これを許可する
+    match /{path=**}/invite_histories/{inviteHistoryId} {
+      allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(resource.data.group_id)/member_users/$(reqAuthEmailToMd5()));
     }
 
     match /{document=**} {

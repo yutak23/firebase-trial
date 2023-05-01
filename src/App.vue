@@ -37,11 +37,18 @@ const logout = async () => {
 		console.log(e);
 	}
 };
+
+const overlay = ref(true);
+const displayLoading = () => {
+	overlay.value = true;
+};
+const closeLoading = () => {
+	overlay.value = false;
+};
 </script>
 
 <template>
 	<v-app>
-		<!-- TODO RouterViewのみの構造（ヘッダ - メインページ の構造）に変更する -->
 		<v-app-bar density="compact">
 			<v-app-bar-title class="photos">{{ $t('app.title') }}</v-app-bar-title>
 
@@ -114,15 +121,22 @@ const logout = async () => {
 			<!-- https://tech.yappli.io/entry/suspense-with-routerview -->
 			<RouterView v-slot="{ Component }">
 				<template v-if="Component">
-					<Suspense timeout="0">
+					<Suspense
+						timeout="0"
+						@resolve="closeLoading"
+						@pending="displayLoading"
+					>
 						<template #default>
 							<component :is="Component" />
 						</template>
 
 						<template #fallback>
-							<v-container class="d-flex justify-center align-center">
+							<v-overlay
+								:model-value="overlay"
+								class="align-center justify-center"
+							>
 								<v-progress-circular color="primary" indeterminate size="64" />
-							</v-container>
+							</v-overlay>
 						</template>
 					</Suspense>
 				</template>

@@ -16,20 +16,22 @@ import HelloWorld from '@/components/HelloWorld.vue';
 
 const router = useRouter();
 const userStore = useUserStore();
-const { updateUser } = userStore;
 const { user } = storeToRefs(userStore);
 
 const isLogined = computed(() => !!user.value.id);
 
-if (isLogined.value) {
+const redirecting = ref(true);
+const checkUserExists = async () => {
 	const userDocSnap = await getDoc(
 		doc(db, 'users', user.value.id).withConverter(converter)
 	);
 	if (userDocSnap.exists()) {
-		updateUser(userDocSnap.data());
 		router.push({ name: 'home', params: {} });
+		return;
 	}
-}
+
+	redirecting.value = false;
+};
 
 onMounted(() => {
 	const ui =
@@ -46,8 +48,8 @@ onMounted(() => {
 			],
 			callbacks: {
 				// eslint-disable-next-line no-unused-vars
-				signInSuccessWithAuthResult(authResult, redirectUrl) {
-					router.push({ name: 'welcome', params: {} });
+				async signInSuccessWithAuthResult(authResult, redirectUrl) {
+					await checkUserExists();
 					return false;
 				}
 			}
@@ -109,7 +111,7 @@ const currentTitle = computed(() => {
 			</v-col>
 		</v-row>
 
-		<v-row v-else class="justify-center pt-2">
+		<v-row v-if="!redirecting" class="justify-center pt-2">
 			<v-col cols="12" md="6">
 				<v-card elevation="1">
 					<v-card-title>

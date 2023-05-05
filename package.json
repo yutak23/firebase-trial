@@ -64,7 +64,7 @@
 		"style": "prettier --ignore-unknown --write .",
 		"ncu": "npm-check-updates",
 		"prepare": "npx simple-git-hooks",
-		"postinstall": "cd functions && yarn install"
+		"postinstall": "cd firebase-cloud-functions && yarn install"
 	},
 	"lint-staged": {
 		"*": "npx prettier --ignore-unknown --write",

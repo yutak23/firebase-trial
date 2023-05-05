@@ -5,6 +5,9 @@
 	"license": "MIT",
 	"private": true,
 	"type": "module",
+	"engines": {
+		"node": "16"
+	},
 	"devDependencies": {
 		"@commitlint/cli": "^17.6.1",
 		"@commitlint/config-conventional": "^17.6.1",

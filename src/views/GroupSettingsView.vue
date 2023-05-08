@@ -1,7 +1,6 @@
 <script setup>
-import { ref, reactive, computed } from 'vue';
-import { useRouter } from 'vue-router';
-import { writeBatch, doc } from 'firebase/firestore';
+import { ref, reactive, computed, defineProps } from 'vue';
+import { writeBatch, doc, updateDoc } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import clone from 'lodash/clone';
 import md5 from 'crypto-js/md5';
@@ -16,33 +15,50 @@ import {
 	fetchGroupInvites
 } from '@/service/group-service';
 
-const router = useRouter();
-const {
-	params: { groupId }
-} = router.currentRoute.value;
+const props = defineProps({
+	selectedGroup: { type: String, required: true, default: null }
+});
 
 const auth = getAuth();
 const inviter = await fetchUser({ userId: auth.currentUser.uid });
-const group = await fetchGroup({ groupId });
-
-const bottomNavigation = ref(false);
-const inviteDialog = ref(false);
+const group = await fetchGroup({ groupId: props.selectedGroup });
 
 const groupUsers = reactive([]);
 const dispalyName = computed(
 	() => (user) => `${user.lastName} ${user.firstName}`
 );
-const groupMembers = await fetchGroupMembers({ groupId });
+const groupMembers = await fetchGroupMembers({ groupId: props.selectedGroup });
 groupMembers.forEach((v) => {
 	groupUsers.push(v);
 });
 
 const groupInvitesList = reactive([]);
-const groupInvites = await fetchGroupInvites({ groupId });
-groupInvites.forEach((v) => {
-	groupInvitesList.push(v);
-});
+const initiGroupInvitesList = async () => {
+	const groupInvites = await fetchGroupInvites({
+		groupId: props.selectedGroup
+	});
+	groupInvites.forEach((v) => {
+		groupInvitesList.push(v);
+	});
+};
+await initiGroupInvitesList();
 
+const editGroupForm = ref(null);
+const editableGroupName = ref(false);
+const groupName = ref(group.name);
+const editGroupName = async () => {
+	const { valid } = await editGroupForm.value.validate();
+
+	if (valid) {
+		const groupDocRef = doc(db, 'groups', props.selectedGroup).withConverter(
+			converter
+		);
+		await updateDoc(groupDocRef, { name: groupName.value });
+		editableGroupName.value = false;
+	}
+};
+
+const inviteDialog = ref(false);
 const form = ref(null);
 const rules = computed(() => (inviteUsers, index) => [
 	(v) => !!v || 'Item is required',
@@ -71,18 +87,19 @@ const invite = async () => {
 	const { valid } = await form.value.validate();
 
 	if (valid) {
+		// TODO 招待の重複エラー時のエラーをハンドリングする
 		// TODO Batchだと1件でもNGあると他もNGになるので、Promise.allに変更する
 		const batch = writeBatch(db);
 		inviteUsers.forEach((inviteUser) => {
 			const docRef = doc(
 				db,
 				'groups',
-				groupId,
+				props.selectedGroup,
 				'invites',
 				md5(inviteUser.email).toString()
 			).withConverter(converter);
 			batch.set(docRef, {
-				groupId,
+				groupId: props.selectedGroup,
 				groupName: group.name,
 				invitedUserEmail: inviteUser.email,
 				inviterUid: auth.currentUser.uid,
@@ -94,6 +111,7 @@ const invite = async () => {
 		});
 
 		await batch.commit();
+		await initiGroupInvitesList();
 		inviteDialog.value = false;
 	}
 };
@@ -106,8 +124,43 @@ const openInviteDialog = () => {
 
 <template>
 	<v-container>
-		<v-card>
-			<v-card-title>グルーのメンバー</v-card-title>
+		<v-row>
+			<v-col>
+				<v-card class="mb-4">
+					<v-card-title>グループ名を変更</v-card-title>
+					<v-card-text>
+						<v-form ref="editGroupForm">
+							<v-row>
+								<v-col cols="12">
+									<v-text-field
+										v-model="groupName"
+										label="グループ名"
+										:rules="[(v) => !!v || 'Item is required']"
+										validate-on="blur"
+										variant="underlined"
+										append-icon="mdi-pencil"
+										:readonly="!editableGroupName"
+										@click:append="editableGroupName = true"
+									/>
+								</v-col>
+							</v-row>
+						</v-form>
+					</v-card-text>
+					<v-card-actions>
+						<v-spacer></v-spacer>
+						<v-btn @click="editGroupName" :disabled="!editableGroupName">
+							<template v-slot:prepend>
+								<v-icon>mdi-account-multiple-plus</v-icon>
+							</template>
+							保存
+						</v-btn>
+					</v-card-actions>
+				</v-card>
+			</v-col>
+		</v-row>
+
+		<v-card class="mb-4">
+			<v-card-title>グループのメンバー</v-card-title>
 			<v-card-text>
 				<v-list>
 					<template v-for="(groupUser, i) in groupUsers" :key="i">
@@ -141,7 +194,7 @@ const openInviteDialog = () => {
 			</v-card-actions>
 		</v-card>
 
-		<v-card class="mt-4">
+		<v-card>
 			<v-card-title>招待中のメンバー</v-card-title>
 			<v-card-text>
 				<v-list>
@@ -152,7 +205,9 @@ const openInviteDialog = () => {
 							</v-list-item-title>
 
 							<!-- TODO 招待取り消しを実装 -->
-							<template v-slot:append> <v-btn>取り消し</v-btn> </template>
+							<template v-slot:append>
+								<v-btn disabled>取り消し</v-btn>
+							</template>
 						</v-list-item>
 
 						<v-divider inset v-if="groupInvitesList.length - 1 > i" />
@@ -160,9 +215,6 @@ const openInviteDialog = () => {
 				</v-list>
 			</v-card-text>
 		</v-card>
-
-		<v-bottom-navigation v-model="bottomNavigation" density="compact">
-		</v-bottom-navigation>
 
 		<v-dialog v-model="inviteDialog" persistent fullscreen>
 			<v-card>

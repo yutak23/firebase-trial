@@ -1,5 +1,14 @@
 {
-  "projects": {
-    "default": "fir-cloud-functions-trial"
-  }
+	"projects": {
+		"default": "fir-cloud-functions-trial"
+	},
+	"targets": {},
+	"etags": {
+		"fir-cloud-functions-trial": {
+			"extensionInstances": {
+				"firestore-bigquery-export-xifi": "5596063511eb38b021ffd776cc99340b611440122d0744c62918c75a5b445657",
+				"firestore-bigquery-export": "019a9ac5e4f9d3ef118221d13e484db0d7ef9c43a856b5184409ead7fc9fae1e"
+			}
+		}
+	}
 }

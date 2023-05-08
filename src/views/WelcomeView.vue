@@ -34,6 +34,7 @@ const checkUserExists = async () => {
 		doc(db, 'users', user.value.id).withConverter(converter)
 	);
 	if (userDocSnap.exists()) {
+		updateUser(userDocSnap.data());
 		router.push({ name: 'home', params: {} });
 		return;
 	}
@@ -85,15 +86,20 @@ const stepTo = async (number) => {
 const userRegister = async () => {
 	const { valid } = await createUserForm.value.validate();
 
-	if (valid)
-		await setDoc(doc(db, 'users', user.value.id).withConverter(converter), {
+	if (valid) {
+		const baseUser = {
 			id: user.value.id,
 			email: user.value.email,
 			firstName: firstName.value,
 			lastName: lastName.value,
-			logoUri: logoUri.value,
+			logoUri: logoUri.value
+		};
+		await setDoc(doc(db, 'users', user.value.id).withConverter(converter), {
+			...baseUser,
 			ownerGroupCount: 0
 		});
+		updateUser(baseUser);
+	}
 };
 const createGroup = async () => {
 	const { valid } = await createGroupForm.value.validate();

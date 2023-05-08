@@ -1,27 +1,11 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
-// import { useRouter } from 'vue-router';
-// import { storeToRefs } from 'pinia';
-// import {
-// doc,
-// getDoc,
-// collection,
-// runTransaction,
-// query,
-// collectionGroup,
-// where,
-// getDocs
-// } from 'firebase/firestore';
 import { getAuth } from 'firebase/auth';
 import { httpsCallable } from 'firebase/functions';
 import { strict as assert } from 'node:assert';
 
 import { functions } from '@/firebase';
 import { fetchMyInvites } from '@/service/group-service';
-// import { converter } from '@/firebase/store';
-// import useUserStore from '@/stores/user';
-
-// const router = useRouter();
 
 const auth = getAuth();
 
@@ -43,7 +27,7 @@ const headers = computed(() => [
 		width: 325
 	},
 	{
-		title: 'ステータス',
+		title: 'アクション',
 		align: 'center',
 		sortable: false,
 		key: 'actions',

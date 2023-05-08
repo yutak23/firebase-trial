@@ -8,9 +8,12 @@ import {
 	collectionGroup,
 	where
 } from 'firebase/firestore';
+import { getAuth } from 'firebase/auth';
 
 import { db } from '@/firebase';
 import { converter } from '@/firebase/store';
+
+const auth = getAuth();
 
 const fetchGroup = async (options = {}) => {
 	assert.ok(options.groupId, 'groupId is required');
@@ -22,6 +25,28 @@ const fetchGroup = async (options = {}) => {
 
 	if (!groupDocSnap.exists()) return null;
 	return groupDocSnap.data();
+};
+
+const fetchMyGroups = async () => {
+	const groupDocPaths = [];
+	const members = query(
+		collectionGroup(db, 'member_users'),
+		where('id', '==', auth.currentUser.uid)
+	);
+	const querySnapshots = await getDocs(members);
+	querySnapshots.forEach((querySnapshot) => {
+		groupDocPaths.push(querySnapshot.ref.parent.parent.path);
+	});
+
+	const groups = [];
+	await Promise.all(
+		groupDocPaths.map(async (groupDocPath) => {
+			const groupRef = doc(db, groupDocPath).withConverter(converter);
+			const groupSnap = await getDoc(groupRef);
+			groups.push({ id: groupRef.id, ...groupSnap.data() });
+		})
+	);
+	return groups;
 };
 
 const fetchGroupMembers = async (options = {}) => {
@@ -81,4 +106,10 @@ const fetchMyInvites = async (options = {}) => {
 	return invites;
 };
 
-export { fetchGroup, fetchGroupMembers, fetchGroupInvites, fetchMyInvites };
+export {
+	fetchGroup,
+	fetchMyGroups,
+	fetchGroupMembers,
+	fetchGroupInvites,
+	fetchMyInvites
+};

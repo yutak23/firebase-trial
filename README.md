@@ -9,3 +9,11 @@
   - firestore
 
 - firebase deploy でインフラ構築
+
+## システム構成
+
+- Hosting  
+  Cloudflare Pages
+
+- Access Management  
+  Cloudflare Access(Cloudflare Zero Trust)

@@ -62,7 +62,8 @@ onMounted(() => {
 					await checkUserExists();
 					return false;
 				}
-			}
+			},
+			signInFlow: 'popup'
 		});
 	}
 });

@@ -122,6 +122,11 @@ export const replyInvite = functions
 	.region('asia-northeast1')
 	.runWith({ enforceAppCheck: true })
 	.https.onCall(async (data, context) => {
+		context.rawRequest.res.setHeader(
+			'Access-Control-Allow-Origin',
+			'https://firebase-trial.pages.dev'
+		);
+
 		if (context.app === undefined) {
 			throw new functions.https.HttpsError(
 				'failed-precondition',

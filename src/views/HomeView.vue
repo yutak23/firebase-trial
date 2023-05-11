@@ -6,13 +6,15 @@ import {
 	collection,
 	getDocs,
 	setDoc,
-	addDoc,
+	updateDoc,
 	where,
 	query,
 	orderBy,
 	deleteDoc
 } from 'firebase/firestore';
 import { DateTime } from 'luxon';
+import snakecaseKeys from 'snakecase-keys';
+
 import VueDatePicker from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
 
@@ -219,19 +221,17 @@ const register = async () => {
 			memo: book.memo
 		};
 		if (book.id)
-			await setDoc(
-				doc(db, 'groups', props.selectedGroup, 'books', book.id).withConverter(
-					converter
-				),
-				data
+			// updateDocではwithConverterが効かない https://github.com/firebase/firebase-js-sdk/issues/2842
+			await updateDoc(
+				doc(db, 'groups', props.selectedGroup, 'books', book.id),
+				snakecaseKeys({ bookId: book.id, ...data })
 			);
-		else
-			await addDoc(
-				collection(db, 'groups', props.selectedGroup, 'books').withConverter(
-					converter
-				),
-				data
-			);
+		else {
+			const groupBookDocRef = doc(
+				collection(db, 'groups', props.selectedGroup, 'books')
+			).withConverter(converter);
+			await setDoc(groupBookDocRef, { bookId: groupBookDocRef.id, ...data });
+		}
 
 		await getAllCurrentData({ loading: false });
 

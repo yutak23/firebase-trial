@@ -36,16 +36,20 @@ service cloud.firestore {
       }
 
       match /books/{bookId} {
-        function isValidGroupIdIfContain() {
+        function isValidGroupId() {
           return "group_id" in request.resource.data && request.resource.data.group_id == groupId;
         }
 
+         function isValidBookId() {
+          return "book_id" in request.resource.data && request.resource.data.book_id == bookId;
+        }
+
         function isValidKeys() {
-          return request.resource.data.keys().hasAll(["group_id","date","price","cateory","payer","memo"])
+          return request.resource.data.keys().hasOnly(["group_id","book_id","date","price","cateory","payer","memo"])
         }
 
         allow read: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5()));
-        allow create, update: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5())) && isValidGroupIdIfContain() && isValidKeys();
+        allow create, update: if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5())) && isValidGroupId() && isValidBookId() && isValidKeys();
         allow delete:if isSignedIn() && exists(/databases/$(database)/documents/groups/$(groupId)/member_users/$(reqAuthEmailToMd5()))
       }
 

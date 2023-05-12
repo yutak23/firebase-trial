@@ -129,7 +129,7 @@ const createGroup = async () => {
 							'member_users',
 							md5(auth.currentUser.email).toString()
 						).withConverter(converter),
-						user.value
+						{ ...user.value, groupId: docRef.id }
 					);
 
 				transaction.update(

@@ -48,6 +48,9 @@
 	},
 	"extensions": {
 		"firestore-bigquery-export": "firebase/firestore-bigquery-export@0.1.31",
-		"firestore-bigquery-export-xifi": "firebase/firestore-bigquery-export@0.1.31"
+		"firestore-bigquery-export-xifi": "firebase/firestore-bigquery-export@0.1.31",
+		"firestore-bigquery-export-xeg0": "firebase/firestore-bigquery-export@0.1.31",
+		"firestore-bigquery-export-bcu4": "firebase/firestore-bigquery-export@0.1.31",
+		"firestore-bigquery-export-8wuk": "firebase/firestore-bigquery-export@0.1.31"
 	}
 }

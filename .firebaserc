@@ -6,8 +6,11 @@
 	"etags": {
 		"fir-cloud-functions-trial": {
 			"extensionInstances": {
-				"firestore-bigquery-export-xifi": "5596063511eb38b021ffd776cc99340b611440122d0744c62918c75a5b445657",
-				"firestore-bigquery-export": "019a9ac5e4f9d3ef118221d13e484db0d7ef9c43a856b5184409ead7fc9fae1e"
+				"firestore-bigquery-export-8wuk": "873bf3c796cb035e3e1e1dc6e5420bbd7c45800d01b219d636ec850eac58c39f",
+				"firestore-bigquery-export-bcu4": "8d18ea25b5c66c8b738212bfbb9c74e9bb8236882d42ba82c1d6bf0bd0dd6e3f",
+				"firestore-bigquery-export-xeg0": "531fdf4212af33a991acb5428d498bc78944896c72ff5db74d1194cc36f222fe",
+				"firestore-bigquery-export-xifi": "6519056e2ec33f71df4e0e92749fa3241fc84735e68f9268a5f22c935688fa81",
+				"firestore-bigquery-export": "f7a02ff26a9094ebd80abbae0f60bdf6ec0cb26eb3a1b67df4faec115b048618"
 			}
 		}
 	}

@@ -67,7 +67,7 @@ service cloud.firestore {
         }
 
         function isGroupMember() {
-          return exists(/databases/$(database)/documents/groups/$(request.resource.data.group_id)/member_users/$(reqAuthEmailToMd5()));
+          return "group_id" in request.resource.data && exists(/databases/$(database)/documents/groups/$(request.resource.data.group_id)/member_users/$(reqAuthEmailToMd5()));
         }
 
         function isNotInvited() {

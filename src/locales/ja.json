@@ -19,7 +19,8 @@
 				"clothing_expenses": "服飾費",
 				"transportation_expenses": "交通費",
 				"rent_expenses": "家賃",
-				"utilities_expense": "水道光熱費"
+				"utilities_expense": "水道光熱費",
+				"another_expense": "その他"
 			},
 			"member": { "joint": "共同" }
 		}

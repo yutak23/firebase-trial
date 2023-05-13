@@ -102,6 +102,11 @@ const cateories = computed(() => [
 		id: 'utilities_expense',
 		title: t('groups.add_book_data_dialog.category.utilities_expense'),
 		value: 'utilities_expense'
+	},
+	{
+		id: 'another_expense',
+		title: t('groups.add_book_data_dialog.category.another_expense'),
+		value: 'another_expense'
 	}
 ]);
 const create = () => {

@@ -451,4 +451,7 @@ await getAllCurrentData();
 	</v-container>
 </template>
 
-<style scoped lang="sass"></style>
+<style scoped lang="sass">
+.v-bottom-navigation
+	position: fixed !important
+</style>

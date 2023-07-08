@@ -104,6 +104,11 @@ const cateories = computed(() => [
 		value: 'utilities_expense'
 	},
 	{
+		id: 'maternity_baby_expense',
+		title: t('groups.add_book_data_dialog.category.maternity_baby_expense'),
+		value: 'maternity_baby_expense'
+	},
+	{
 		id: 'another_expense',
 		title: t('groups.add_book_data_dialog.category.another_expense'),
 		value: 'another_expense'
@@ -370,6 +375,7 @@ await getAllCurrentData();
 							<v-col cols="12">
 								<v-text-field
 									v-model="book.price"
+									type="number"
 									label="金額"
 									variant="underlined"
 									:rules="[(v) => !!v || 'Item is required']"

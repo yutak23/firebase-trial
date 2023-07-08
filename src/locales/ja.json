@@ -20,6 +20,7 @@
 				"transportation_expenses": "交通費",
 				"rent_expenses": "家賃",
 				"utilities_expense": "水道光熱費",
+				"maternity_baby_expense": "妊婦/Baby費",
 				"another_expense": "その他"
 			},
 			"member": { "joint": "共同" }

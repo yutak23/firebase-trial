@@ -34,7 +34,7 @@
 		"luxon": "^3.3.0",
 		"npm-check-updates": "^16.10.16",
 		"pinia": "^2.1.4",
-		"prettier": "^2.8.8",
+		"prettier": "^3.0.0",
 		"sass": "^1.64.1",
 		"simple-git-hooks": "^2.9.0",
 		"snakecase-keys": "^5.4.6",

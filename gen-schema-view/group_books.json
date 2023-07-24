@@ -1,0 +1,32 @@
+{
+	"fields": [
+		{
+			"name": "group_id",
+			"type": "string"
+		},
+		{
+			"name": "book_id",
+			"type": "string"
+		},
+		{
+			"name": "date",
+			"type": "timestamp"
+		},
+		{
+			"name": "cateory",
+			"type": "string"
+		},
+		{
+			"name": "price",
+			"type": "number"
+		},
+		{
+			"name": "memo",
+			"type": "string"
+		},
+		{
+			"name": "payer",
+			"type": "string"
+		}
+	]
+}

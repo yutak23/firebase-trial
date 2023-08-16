@@ -1,5 +1,5 @@
-import { createI18n } from 'vue-i18n';
 import path from 'node:path';
+import { createI18n } from 'vue-i18n';
 
 const loadLocaleMessages = () => {
 	const messages = {};

@@ -1,8 +1,8 @@
 <script setup>
+import { strict as assert } from 'node:assert';
 import { ref, reactive, computed } from 'vue';
 import { getAuth } from 'firebase/auth';
 import { httpsCallable } from 'firebase/functions';
-import { strict as assert } from 'node:assert';
 
 import { functions } from '@/firebase';
 import { fetchMyInvites } from '@/service/group-service';

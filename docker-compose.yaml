@@ -9,4 +9,4 @@ services:
     volumes:
       - ./tests/data/testdata.yaml:/work/testdata.yaml
     command: |
-      --project=fir-cloud-functions-trial --data-from-yaml=./testdata.yaml
+      --project=fir-cloud-functions-trial

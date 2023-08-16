@@ -435,7 +435,7 @@ await getAllCurrentData();
 		</v-dialog>
 
 		<v-dialog v-model="datePickDialog" persistent width="300">
-			<v-card height="360px">
+			<v-card height="450px">
 				<v-card-text class="d-flex justify-center">
 					<VueDatePicker
 						ref="datepicker"

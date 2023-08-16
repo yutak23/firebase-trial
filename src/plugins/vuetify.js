@@ -8,14 +8,14 @@ import * as components from 'vuetify/components';
 import * as directives from 'vuetify/directives';
 import colors from 'vuetify/lib/util/colors';
 // eslint-disable-next-line import/no-unresolved
-import { VDataTable, VDataTableServer } from 'vuetify/labs/VDataTable'; // https://vuetifyjs.com/en/labs/introduction/#usage
+import * as labsComponents from 'vuetify/labs/components';
 // eslint-disable-next-line import/no-unresolved
 import { createVueI18nAdapter } from 'vuetify/locale/adapters/vue-i18n';
 import { useI18n } from 'vue-i18n';
 import i18n from '@/plugins/i18n';
 
 const vuetify = createVuetify({
-	components: { ...components, VDataTable, VDataTableServer },
+	components: { ...components, ...labsComponents },
 	directives,
 	theme: {
 		themes: {

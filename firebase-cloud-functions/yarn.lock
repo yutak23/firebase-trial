@@ -115,10 +115,10 @@
   dependencies:
     tslib "^2.1.0"
 
-"@google-cloud/bigquery@^7.2.0":
-  version "7.2.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/bigquery/-/bigquery-7.2.0.tgz#bb98762afbe23c513322863f43ae80f171ab0bf1"
-  integrity sha512-3yf/fhtfjiLXG77Rrd+EO9mum4VFK98wspUFCeaL1IxVZE0jo8bjYT5AecU/DiJDHBjrjO3Kily3h6fiEPJBSA==
+"@google-cloud/bigquery@^7.3.0":
+  version "7.3.0"
+  resolved "https://registry.yarnpkg.com/@google-cloud/bigquery/-/bigquery-7.3.0.tgz#39dcb6ad7b0beaa71577686d1714d16fc678084e"
+  integrity sha512-a/qQBOMlSRIVm262Kp3+Zg2+Et2fl+AwQv8mpVtvrpyk+wYQaY3dTK3U+RE6aWCiq/R1xo1vIXIYCRAQAoBsfw==
   dependencies:
     "@google-cloud/common" "^5.0.0"
     "@google-cloud/paginator" "^5.0.0"
@@ -340,10 +340,10 @@
   resolved "https://registry.yarnpkg.com/@protobufjs/utf8/-/utf8-1.1.0.tgz#a777360b5b39a1a2e5106f8e858f2fd2d060c570"
   integrity sha512-Vvn3zZrhQZkkBE8LSuW3em98c0FwgO4nxzv6OdSxPKJIEKY2bGbHn+mhGIPerzI4twdxaP8/0+06HBpwf345Lw==
 
-"@rushstack/eslint-patch@^1.4.0":
-  version "1.4.0"
-  resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.4.0.tgz#77e948b9760bd22736a5d26e335a690f76fda37b"
-  integrity sha512-cEjvTPU32OM9lUFegJagO0mRnIn+rbqrG89vV8/xLnLFX0DoR0r1oy5IlTga71Q7uT3Qus7qm7wgeiMT/+Irlg==
+"@rushstack/eslint-patch@^1.5.1":
+  version "1.5.1"
+  resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.5.1.tgz#5f1b518ec5fa54437c0b7c4a821546c64fed6922"
+  integrity sha512-6i/8UoL0P5y4leBIGzvkZdS85RDMG9y1ihZzmTZQ5LdHUYmZ7pKFoj8X0236s3lusPs1Fa5HTQUpwI+UfTcmeA==
 
 "@tootallnate/once@2":
   version "2.0.0"
@@ -725,15 +725,15 @@ callsites@^3.0.0:
   resolved "https://registry.yarnpkg.com/callsites/-/callsites-3.1.0.tgz#b3630abd8943432f54b3f0519238e33cd7df2f73"
   integrity sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
 
-camelcase-keys@^9.0.0:
-  version "9.0.0"
-  resolved "https://registry.yarnpkg.com/camelcase-keys/-/camelcase-keys-9.0.0.tgz#0083d37bd54eca70a59c0cf223adce9773b41376"
-  integrity sha512-GdZ92DNXdcfFB/5Kq4O82EL6UW5neiRBhfNP5M3mGw7CX2sPDbVA04ZPLsqbp7oMi2l3m2I0AZ/kFP5Nk5kopA==
+camelcase-keys@^9.1.0:
+  version "9.1.0"
+  resolved "https://registry.yarnpkg.com/camelcase-keys/-/camelcase-keys-9.1.0.tgz#d8a29d60ee8130bc41cdc84c4170f0afbf69920c"
+  integrity sha512-RcLmR20cA5J6ZSqOQcPLcJ8fpiczDLVM5V5aOR0w7UgMcev35tPU8z8Q380wWekRRQDON9cLhWOuGm03VDQ7Hg==
   dependencies:
     camelcase "^8.0.0"
     map-obj "5.0.0"
     quick-lru "^6.1.1"
-    type-fest "^4.2.0"
+    type-fest "^4.3.2"
 
 camelcase@^8.0.0:
   version "8.0.0"
@@ -1394,10 +1394,10 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-firebase-admin@^11.10.1:
-  version "11.10.1"
-  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.10.1.tgz#5f0f83a44627e89938d350c5e4bbac76596c963e"
-  integrity sha512-atv1E6GbuvcvWaD3eHwrjeP5dAVs+EaHEJhu9CThMzPY6In8QYDiUR6tq5SwGl4SdA/GcAU0nhwWc/FSJsAzfQ==
+firebase-admin@^11.11.0:
+  version "11.11.0"
+  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-11.11.0.tgz#3d6df5dfbcf85dc1c6c4302f8aee4f7c82171725"
+  integrity sha512-lp784gXFAJgUEtjSdYNZGTWZqltqjBkoaPSQhDKnmWXJP/MCbWdiDY1hsdkl/6O4O4KFovTjUDLu26sojwdQvw==
   dependencies:
     "@fastify/busboy" "^1.2.1"
     "@firebase/database-compat" "^0.3.4"
@@ -3006,10 +3006,10 @@ type-fest@^2.5.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-2.19.0.tgz#88068015bb33036a598b952e55e9311a60fd3a9b"
   integrity sha512-RAH822pAdBgcNMAfWnCBU3CFZcfZ/i1eZjwFU/dsLKumyuuP3niueg2UAukXYF0E2AAoc82ZSSf9J0WQBinzHA==
 
-type-fest@^4.2.0:
-  version "4.2.0"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.2.0.tgz#e259430307710e77721ecf6f545840acad72195f"
-  integrity sha512-5zknd7Dss75pMSED270A1RQS3KloqRJA9XbXLe0eCxyw7xXFb3rd+9B0UQ/0E+LQT6lnrLviEolYORlRWamn4w==
+type-fest@^4.3.2:
+  version "4.3.3"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.3.3.tgz#e991de7c373097721d53dbf38b904f1e51915294"
+  integrity sha512-bxhiFii6BBv6UiSDq7uKTMyADT9unXEl3ydGefndVLxFeB44LRbT4K7OJGDYSyDrKnklCC1Pre68qT2wbUl2Aw==
 
 type-is@~1.6.18:
   version "1.6.18"

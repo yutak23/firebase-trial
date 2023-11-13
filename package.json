@@ -29,7 +29,7 @@
 		"firebase-tools": "^12.8.0",
 		"firebaseui": "^6.1.0",
 		"license-checker": "^25.0.1",
-		"lint-staged": "^14.0.1",
+		"lint-staged": "^15.1.0",
 		"lodash": "^4.17.21",
 		"luxon": "^3.4.3",
 		"npm-check-updates": "^16.14.6",

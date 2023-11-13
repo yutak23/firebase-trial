@@ -9,8 +9,8 @@
 		"node": "18"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^17.8.1",
-		"@commitlint/config-conventional": "^17.8.1",
+		"@commitlint/cli": "^18.4.1",
+		"@commitlint/config-conventional": "^18.4.0",
 		"@firebaseextensions/fs-bq-schema-views": "^0.4.7",
 		"@mdi/font": "^7.3.67",
 		"@rushstack/eslint-patch": "^1.5.1",

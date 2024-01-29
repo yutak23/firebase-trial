@@ -26,7 +26,7 @@
 		"eslint-plugin-vue": "^9.20.1",
 		"eslint-plugin-vuetify": "^2.1.1",
 		"firebase": "^10.7.2",
-		"firebase-tools": "^12.9.1",
+		"firebase-tools": "^13.1.0",
 		"firebaseui": "^6.1.0",
 		"license-checker": "^25.0.1",
 		"lint-staged": "^15.2.0",

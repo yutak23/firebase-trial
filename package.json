@@ -15,7 +15,7 @@
 		"@mdi/font": "^7.4.47",
 		"@rushstack/eslint-patch": "^1.7.2",
 		"@vitejs/plugin-vue": "^4.6.2",
-		"@vue/eslint-config-prettier": "^8.0.0",
+		"@vue/eslint-config-prettier": "^9.0.0",
 		"@vuepic/vue-datepicker": "^6.1.0",
 		"camelcase-keys": "^9.1.3",
 		"crypto-js": "^4.2.0",

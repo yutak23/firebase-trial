@@ -2694,14 +2694,14 @@ snake-case@^3.0.4:
     dot-case "^3.0.4"
     tslib "^2.0.3"
 
-snakecase-keys@^6.0.0:
-  version "6.0.0"
-  resolved "https://registry.yarnpkg.com/snakecase-keys/-/snakecase-keys-6.0.0.tgz#2379f9f14525ef8bbfd2079bfc08c01bcc415002"
-  integrity sha512-E5a0C3rcj+Cvq+dt41mw6tV6Wx78/JpQyR71GDiyGSXdp3jEvKxv8pIP0tOHmEMiqKVZSwflXtlWwqNn5oTbbQ==
+snakecase-keys@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/snakecase-keys/-/snakecase-keys-8.0.0.tgz#87da70d45529b35f3f27af8c8ef02b428e705c68"
+  integrity sha512-qS7XvESuFxskrmD8/O9tOMdLdV9YTuPfNLdRJIvNJKNEZtH9XVPwmZioROwl4TsVDbOFqlQ/o7pURuF8MnjYsg==
   dependencies:
     map-obj "^4.1.0"
     snake-case "^3.0.4"
-    type-fest "^3.12.0"
+    type-fest "^4.15.0"
 
 statuses@2.0.1:
   version "2.0.1"
@@ -2892,10 +2892,10 @@ type-fest@^0.20.2:
   resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-0.20.2.tgz#1bf207f4b28f91583666cb5fbd327887301cd5f4"
   integrity sha512-Ne+eE4r0/iWnpAxD852z3A+N0Bt5RN//NjJwRd2VFHEmrywxf5vsZlh4R6lixl6B+wz/8d+maTSAkN1FIkI3LQ==
 
-type-fest@^3.12.0:
-  version "3.13.1"
-  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-3.13.1.tgz#bb744c1f0678bea7543a2d1ec24e83e68e8c8706"
-  integrity sha512-tLq3bSNx+xSpwvAJnzrK0Ep5CLNWjvFTOp71URMaAEWBfRb9nnJiBoUe0tF8bI4ZFO3omgBR6NvnbzVUT3Ly4g==
+type-fest@^4.15.0:
+  version "4.15.0"
+  resolved "https://registry.yarnpkg.com/type-fest/-/type-fest-4.15.0.tgz#21da206b89c15774cc718c4f2d693e13a1a14a43"
+  integrity sha512-tB9lu0pQpX5KJq54g+oHOLumOx+pMep4RaM6liXh2PKmVRFF+/vAtUP0ZaJ0kOySfVNjF6doBWPHhBhISKdlIA==
 
 type-fest@^4.3.2:
   version "4.3.3"

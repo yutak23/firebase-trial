@@ -63,7 +63,7 @@ onMounted(() => {
 					return false;
 				}
 			},
-			signInFlow: 'popup'
+			signInFlow: 'redirect'
 		});
 	}
 });

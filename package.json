@@ -26,7 +26,7 @@
 		"eslint-plugin-vue": "^9.27.0",
 		"eslint-plugin-vuetify": "^2.4.0",
 		"firebase": "^10.12.3",
-		"firebase-tools": "^13.13.0",
+		"firebase-tools": "^13.13.3",
 		"firebaseui": "^6.1.0",
 		"license-checker": "^25.0.1",
 		"lint-staged": "^15.2.7",
@@ -34,8 +34,8 @@
 		"luxon": "^3.4.4",
 		"npm-check-updates": "^16.14.20",
 		"pinia": "^2.1.7",
-		"prettier": "^3.3.2",
-		"sass": "^1.77.6",
+		"prettier": "^3.3.3",
+		"sass": "^1.77.8",
 		"simple-git-hooks": "^2.11.1",
 		"snakecase-keys": "^8.0.1",
 		"vite": "^5.3.3",
@@ -45,7 +45,7 @@
 		"vue": "^3.4.31",
 		"vue-i18n": "^9.13.1",
 		"vue-router": "^4.4.0",
-		"vuetify": "^3.6.11",
+		"vuetify": "^3.6.12",
 		"webfontloader": "^1.6.28"
 	},
 	"scripts": {

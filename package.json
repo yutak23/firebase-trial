@@ -43,7 +43,7 @@
 		"vite-plugin-node-polyfills": "^0.22.0",
 		"vite-plugin-vuetify": "^2.0.4",
 		"vue": "^3.5.8",
-		"vue-i18n": "^9.14.0",
+		"vue-i18n": "^10.0.3",
 		"vue-router": "^4.4.5",
 		"vuetify": "^3.7.2",
 		"webfontloader": "^1.6.28"

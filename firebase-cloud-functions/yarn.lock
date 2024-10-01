@@ -114,10 +114,10 @@
   dependencies:
     tslib "^2.1.0"
 
-"@google-cloud/bigquery@^7.9.0":
-  version "7.9.0"
-  resolved "https://registry.yarnpkg.com/@google-cloud/bigquery/-/bigquery-7.9.0.tgz#8e778bbe767b41e8ee803b186676f58aeaef6904"
-  integrity sha512-KJTimGLDlAR1IfZ4Y8xhIVfoZ+XBXd0GGuJttLSXxtR0g+4vNsUt0xS33PRVa5TXey97374yU+uWNlCb5bHwBw==
+"@google-cloud/bigquery@^7.9.1":
+  version "7.9.1"
+  resolved "https://registry.yarnpkg.com/@google-cloud/bigquery/-/bigquery-7.9.1.tgz#9e6213a62a2eeb8f547a817e4248379c0b93b35f"
+  integrity sha512-ZkcRMpBoFLxIh6TiQBywA22yT3c2j0f07AHWEMjtYqMQzZQbFrpxuJU2COp3tyjZ91ZIGHe4gY7/dGZL88cltg==
   dependencies:
     "@google-cloud/common" "^5.0.0"
     "@google-cloud/paginator" "^5.0.2"
@@ -1552,10 +1552,10 @@ find-up@^5.0.0:
     locate-path "^6.0.0"
     path-exists "^4.0.0"
 
-firebase-admin@^12.5.0:
-  version "12.5.0"
-  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-12.5.0.tgz#fed378b8b8ee6d7793ba23a5b8e1f43740de8bdb"
-  integrity sha512-ad8vnlPcuuZN9scSgY8UnAxPI4mzP2/Q+dsrVLTf+j3h7bIq0FOelDCDGz4StgKJdk244v2kpOxqJjPG3grBHg==
+firebase-admin@^12.6.0:
+  version "12.6.0"
+  resolved "https://registry.yarnpkg.com/firebase-admin/-/firebase-admin-12.6.0.tgz#495bfa30a4484d1af6390bb3481fdf911bca530e"
+  integrity sha512-gc0pDiUmxscxBhcjMcttmjvExJmnQdVRb+IIth95CvMm7F9rLdabrQZThW2mK02HR696P+rzd6NqkdUA3URu4w==
   dependencies:
     "@fastify/busboy" "^3.0.0"
     "@firebase/database-compat" "^1.0.2"

@@ -74,23 +74,23 @@
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
 
-"@commitlint/cli@^19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-19.5.0.tgz#a6e2f7f8397ddf9abd5ee5870e30a1bf51b7be2b"
-  integrity sha512-gaGqSliGwB86MDmAAKAtV9SV1SHdmN8pnGq4EJU4+hLisQ7IFfx4jvU4s+pk6tl0+9bv6yT+CaZkufOinkSJIQ==
+"@commitlint/cli@^19.6.0":
+  version "19.6.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-19.6.0.tgz#98e7fc8501cc38b6eef4b7f61e19b15f3c53700e"
+  integrity sha512-v17BgGD9w5KnthaKxXnEg6KLq6DYiAxyiN44TpiRtqyW8NSq+Kx99mkEG8Qo6uu6cI5eMzMojW2muJxjmPnF8w==
   dependencies:
     "@commitlint/format" "^19.5.0"
-    "@commitlint/lint" "^19.5.0"
+    "@commitlint/lint" "^19.6.0"
     "@commitlint/load" "^19.5.0"
     "@commitlint/read" "^19.5.0"
     "@commitlint/types" "^19.5.0"
     tinyexec "^0.3.0"
     yargs "^17.0.0"
 
-"@commitlint/config-conventional@^19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-19.5.0.tgz#f838cdaed0e0e223cdc2e865f055d474a49fe18c"
-  integrity sha512-OBhdtJyHNPryZKg0fFpZNOBM1ZDbntMvqMuSmpfyP86XSfwzGw4CaoYRG4RutUPg0BTK07VMRIkNJT6wi2zthg==
+"@commitlint/config-conventional@^19.6.0":
+  version "19.6.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-19.6.0.tgz#badba72c8639ea79291e2941001bd7ea7fad3a2c"
+  integrity sha512-DJT40iMnTYtBtUfw9ApbsLZFke1zKh6llITVJ+x9mtpHD08gsNXaIRqHTmwTZL3dNX5+WoyK7pCN/5zswvkBCQ==
   dependencies:
     "@commitlint/types" "^19.5.0"
     conventional-changelog-conventionalcommits "^7.0.2"
@@ -128,22 +128,22 @@
     "@commitlint/types" "^19.5.0"
     chalk "^5.3.0"
 
-"@commitlint/is-ignored@^19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/is-ignored/-/is-ignored-19.5.0.tgz#f8b7f365887acc1e3bdb31b17117bb435585dddf"
-  integrity sha512-0XQ7Llsf9iL/ANtwyZ6G0NGp5Y3EQ8eDQSxv/SRcfJ0awlBY4tHFAvwWbw66FVUaWICH7iE5en+FD9TQsokZ5w==
+"@commitlint/is-ignored@^19.6.0":
+  version "19.6.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/is-ignored/-/is-ignored-19.6.0.tgz#6adb9097d36b68e00b9c06a73d7a08e9f54c54dc"
+  integrity sha512-Ov6iBgxJQFR9koOupDPHvcHU9keFupDgtB3lObdEZDroiG4jj1rzky60fbQozFKVYRTUdrBGICHG0YVmRuAJmw==
   dependencies:
     "@commitlint/types" "^19.5.0"
     semver "^7.6.0"
 
-"@commitlint/lint@^19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/lint/-/lint-19.5.0.tgz#f4e162e7857a1c0694b20b92527704897558ff70"
-  integrity sha512-cAAQwJcRtiBxQWO0eprrAbOurtJz8U6MgYqLz+p9kLElirzSCc0vGMcyCaA1O7AqBuxo11l1XsY3FhOFowLAAg==
+"@commitlint/lint@^19.6.0":
+  version "19.6.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/lint/-/lint-19.6.0.tgz#f9fc9b11b808c96bd3f85e882e056daabac40c36"
+  integrity sha512-LRo7zDkXtcIrpco9RnfhOKeg8PAnE3oDDoalnrVU/EVaKHYBWYL1DlRR7+3AWn0JiBqD8yKOfetVxJGdEtZ0tg==
   dependencies:
-    "@commitlint/is-ignored" "^19.5.0"
+    "@commitlint/is-ignored" "^19.6.0"
     "@commitlint/parse" "^19.5.0"
-    "@commitlint/rules" "^19.5.0"
+    "@commitlint/rules" "^19.6.0"
     "@commitlint/types" "^19.5.0"
 
 "@commitlint/load@^19.5.0":
@@ -199,10 +199,10 @@
     lodash.mergewith "^4.6.2"
     resolve-from "^5.0.0"
 
-"@commitlint/rules@^19.5.0":
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/rules/-/rules-19.5.0.tgz#2a72ab506d49d7f33eda56f0ae072a3479429e74"
-  integrity sha512-hDW5TPyf/h1/EufSHEKSp6Hs+YVsDMHazfJ2azIk9tHPXS6UqSz1dIRs1gpqS3eMXgtkT7JH6TW4IShdqOwhAw==
+"@commitlint/rules@^19.6.0":
+  version "19.6.0"
+  resolved "https://registry.yarnpkg.com/@commitlint/rules/-/rules-19.6.0.tgz#2436da7974c3cf2a7236257f3ef5dd40c4d91312"
+  integrity sha512-1f2reW7lbrI0X0ozZMesS/WZxgPa4/wi56vFuJENBmed6mWq5KsheN/nxqnl/C23ioxpPO/PL6tXpiiFy5Bhjw==
   dependencies:
     "@commitlint/ensure" "^19.5.0"
     "@commitlint/message" "^19.5.0"
@@ -1818,10 +1818,10 @@
   resolved "https://registry.yarnpkg.com/@ungap/structured-clone/-/structured-clone-1.2.0.tgz#756641adb587851b5ccb3e095daf27ae581c8406"
   integrity sha512-zuVdFrMJiuCDQUMCzQaD6KL28MjnqqN8XnAqiEq9PNm/hCPTSGfrXCOfwj1ow4LFb/tNymJPwsNbVePc1xFqrQ==
 
-"@vitejs/plugin-vue@^5.2.0":
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.2.0.tgz#994f3b4f12d3590c5a6895df4cbd270d9a6d5e17"
-  integrity sha512-7n7KdUEtx/7Yl7I/WVAMZ1bEb0eVvXF3ummWTeLcs/9gvo9pJhuLdouSXGjdZ/MKD1acf1I272+X0RMua4/R3g==
+"@vitejs/plugin-vue@^5.2.1":
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/@vitejs/plugin-vue/-/plugin-vue-5.2.1.tgz#d1491f678ee3af899f7ae57d9c21dc52a65c7133"
+  integrity sha512-cxh314tzaWwOLqVes2gnnCtvBDcM1UMdn+iFR+UjAn411dPT3tOmqrJjbMd7koZpMAmBM/GqeV4n9ge7JSiJJQ==
 
 "@vue/compiler-core@3.5.13":
   version "3.5.13"
@@ -3019,10 +3019,10 @@ commander@^2.19.0, commander@^2.9.0:
   resolved "https://registry.yarnpkg.com/commander/-/commander-2.20.3.tgz#fd485e84c03eb4881c20722ba48035e8531aeb33"
   integrity sha512-GpVkmM8vF2vQUkj2LvZmD35JxeJOLCwJ9cUkugyk2nuhbv3+mJvpLYYt+0+USMxE+oj+ey/lJEnhZw75x/OMcQ==
 
-commander@^4.0.1:
-  version "4.1.1"
-  resolved "https://registry.yarnpkg.com/commander/-/commander-4.1.1.tgz#9fd602bd936294e9e9ef46a3f4d6964044b18068"
-  integrity sha512-NOKm8xhkzAjzFx8B2v5OAHT+u5pRQc2UCa2Vq9jYL/31o2wi9mxBA7LIFs3sV5VSC49z6pEhfbMULvShKj26WA==
+commander@^5.1.0:
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/commander/-/commander-5.1.0.tgz#46abbd1652f8e059bddaef99bbdcb2ad9cf179ae"
+  integrity sha512-P0CysNDQ7rtVw4QIQtm+MRxV66vKFSvlsQvGYXZWR3qFU0jlMKHZZZgw8e+8DSah4UDKMqnknRDQz+xuQXQ/Zg==
 
 commander@~12.1.0:
   version "12.1.0"
@@ -4626,10 +4626,10 @@ firebase-functions@^4.2.0:
     node-fetch "^2.6.7"
     protobufjs "^7.2.2"
 
-firebase-tools@^13.25.0:
-  version "13.25.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.25.0.tgz#a91e2f229b5216b1fbf6fc15f4316d049226aee4"
-  integrity sha512-mrd3czF1cXV1X98czoanIvqOzceQpiBSBaf3B6O67ziXgh3ZsIKDjNk+8dSJIMfUj66DN018s4uX0/1EU+h6Fg==
+firebase-tools@^13.27.0:
+  version "13.27.0"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.27.0.tgz#210083f614e8b8fba05cef8717605542f318430a"
+  integrity sha512-/G6Ga+vEByYV2NnEBwfg2jvh7IgQiwy00fxxkZzXRvMAsx/2CpxoDByYVXsA/Q95k3VuUwi02nrm8qEgJaJrMA==
   dependencies:
     "@electric-sql/pglite" "^0.2.0"
     "@google-cloud/cloud-sql-connector" "^1.3.3"
@@ -4643,7 +4643,7 @@ firebase-tools@^13.25.0:
     cjson "^0.3.1"
     cli-table "0.3.11"
     colorette "^2.0.19"
-    commander "^4.0.1"
+    commander "^5.1.0"
     configstore "^5.0.1"
     cors "^2.8.5"
     cross-env "^5.1.3"
@@ -7996,10 +7996,10 @@ prettier-linter-helpers@^1.0.0:
   dependencies:
     fast-diff "^1.1.2"
 
-prettier@^3.3.3:
-  version "3.3.3"
-  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.3.3.tgz#30c54fe0be0d8d12e6ae61dbb10109ea00d53105"
-  integrity sha512-i2tDNA0O5IrMO757lfrdQZCc2jPNDVntV0m/+4whiDfWaTKfMNgR7Qz0NAeGz/nRqF4m5/6CLzbP4/liHt12Ew==
+prettier@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/prettier/-/prettier-3.4.1.tgz#e211d451d6452db0a291672ca9154bc8c2579f7b"
+  integrity sha512-G+YdqtITVZmOJje6QkXQWzl3fSfMxFwm1tjTyo9exhkmWSqC4Yhd1+lug++IlR2mvRVAxEDDWYkQdeSztajqgg==
 
 process-nextick-args@~2.0.0:
   version "2.0.1"
@@ -10163,10 +10163,10 @@ vue-i18n@^9.14.1:
     "@intlify/shared" "9.14.1"
     "@vue/devtools-api" "^6.5.0"
 
-vue-router@^4.4.5:
-  version "4.4.5"
-  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.4.5.tgz#bdf535e4cf32414ebdea6b4b403593efdb541388"
-  integrity sha512-4fKZygS8cH1yCyuabAXGUAsyi1b2/o/OKgu/RUb+znIYOxPRxdkytJEx+0wGcpBE1pX6vUgh5jwWOKRGvuA/7Q==
+vue-router@^4.5.0:
+  version "4.5.0"
+  resolved "https://registry.yarnpkg.com/vue-router/-/vue-router-4.5.0.tgz#58fc5fe374e10b6018f910328f756c3dae081f14"
+  integrity sha512-HDuk+PuH5monfNuY+ct49mNmkCRK4xJAV9Ts4z9UFc4rzdDnxQLyCMGGc8pKhZhHTVzfanpNwB/lwqevcBwI4w==
   dependencies:
     "@vue/devtools-api" "^6.6.4"
 

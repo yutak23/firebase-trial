@@ -35,7 +35,7 @@
 		"npm-check-updates": "^17.1.13",
 		"pinia": "^2.3.0",
 		"prettier": "^3.4.2",
-		"sass": "^1.83.0",
+		"sass": "^1.83.1",
 		"simple-git-hooks": "^2.11.1",
 		"snakecase-keys": "^8.0.1",
 		"vite": "^5.4.11",

@@ -25,7 +25,7 @@
 		"snakecase-keys": "^8.0.1"
 	},
 	"devDependencies": {
-		"@rushstack/eslint-patch": "^1.10.4",
+		"@rushstack/eslint-patch": "^1.10.5",
 		"eslint": "^8.57.1",
 		"eslint-config-airbnb-base": "15.0.0",
 		"eslint-config-google": "^0.14.0",

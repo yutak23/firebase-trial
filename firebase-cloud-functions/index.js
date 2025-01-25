@@ -1,4 +1,5 @@
-import functions from 'firebase-functions';
+// eslint-disable-next-line import/no-unresolved
+import * as functions from 'firebase-functions/v1';
 import admin from 'firebase-admin';
 import camelcaseKeys from 'camelcase-keys';
 import snakecaseKeys from 'snakecase-keys';

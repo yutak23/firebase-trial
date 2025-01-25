@@ -6,11 +6,11 @@
 	"etags": {
 		"fir-cloud-functions-trial": {
 			"extensionInstances": {
-				"firestore-bigquery-export-8wuk": "abde234ec74ef22d61d9ec175038d4f9f02176b87f1874f483460dc4583f2138",
-				"firestore-bigquery-export-bcu4": "a4d9fa8bcd6a4bfaceada374ce5b637abb77ad1fb71d693efccc362ce9b06d43",
-				"firestore-bigquery-export-xeg0": "8628844b20c8a4105be0fc5259cb1bb6d79aac9b192c29e07db4dc2fc3e4fdaf",
-				"firestore-bigquery-export-xifi": "547f9a022a0e59897c68e3d56baf826dffd6db84bd1ce2e034c3dd161f83334e",
-				"firestore-bigquery-export": "f7a02ff26a9094ebd80abbae0f60bdf6ec0cb26eb3a1b67df4faec115b048618"
+				"firestore-bigquery-export": "ba3e7dc56375be620a34d58c52cc598a7789653fb0648b485b28dd1ab0b9aa29",
+				"firestore-bigquery-export-8wuk": "dcfee0eb128bc3e295bcc2c0d67ceea3d52b0473544993e33a5afeb599c953c6",
+				"firestore-bigquery-export-bcu4": "ed2fa79674148a47135c2b1c667a2d02d5b98cf36c22281921eb87ebb54d6238",
+				"firestore-bigquery-export-xeg0": "20bbfbcdbf6532f17a9a3843abdc4ad270b899926d0c75811304ea8ebfed7117",
+				"firestore-bigquery-export-xifi": "12c899d37f4bc0c67361ce4778b52198561f3a7db5bb8093059f84785c9dfb67"
 			}
 		}
 	}

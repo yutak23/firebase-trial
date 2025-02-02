@@ -9,8 +9,8 @@
 		"node": "20"
 	},
 	"devDependencies": {
-		"@commitlint/cli": "^19.6.1",
-		"@commitlint/config-conventional": "^19.6.0",
+		"@commitlint/cli": "^19.7.1",
+		"@commitlint/config-conventional": "^19.7.1",
 		"@firebaseextensions/fs-bq-schema-views": "^0.4.9",
 		"@mdi/font": "^7.4.47",
 		"@rushstack/eslint-patch": "^1.10.5",
@@ -26,7 +26,7 @@
 		"eslint-plugin-vue": "^9.32.0",
 		"eslint-plugin-vuetify": "^2.5.1",
 		"firebase": "^11.2.0",
-		"firebase-tools": "^13.29.2",
+		"firebase-tools": "^13.29.3",
 		"firebaseui": "^6.1.0",
 		"license-checker": "^25.0.1",
 		"lint-staged": "^15.4.3",
@@ -43,9 +43,9 @@
 		"vite-plugin-node-polyfills": "^0.23.0",
 		"vite-plugin-vuetify": "^2.0.4",
 		"vue": "^3.5.13",
-		"vue-i18n": "^11.0.1",
+		"vue-i18n": "^11.1.0",
 		"vue-router": "^4.5.0",
-		"vuetify": "^3.7.7",
+		"vuetify": "^3.7.9",
 		"webfontloader": "^1.6.28"
 	},
 	"scripts": {

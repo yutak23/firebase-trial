@@ -69,23 +69,23 @@
   resolved "https://registry.yarnpkg.com/@colors/colors/-/colors-1.5.0.tgz#bb504579c1cae923e6576a4f5da43d25f97bdbd9"
   integrity sha512-ooWCrlZP11i8GImSjTHYHLkvFDP48nS4+204nGb1RiX/WXYHmJA2III9/e2DWVabCESdW7hBAEzHRqUn9OUVvQ==
 
-"@commitlint/cli@^19.6.1":
-  version "19.6.1"
-  resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-19.6.1.tgz#24edd26595d911cc6b680cdfbb1fb083bfd5f73d"
-  integrity sha512-8hcyA6ZoHwWXC76BoC8qVOSr8xHy00LZhZpauiD0iO0VYbVhMnED0da85lTfIULxl7Lj4c6vZgF0Wu/ed1+jlQ==
+"@commitlint/cli@^19.7.1":
+  version "19.7.1"
+  resolved "https://registry.yarnpkg.com/@commitlint/cli/-/cli-19.7.1.tgz#aca351ae6200af58b49de58181319015e7429601"
+  integrity sha512-iObGjR1tE/PfDtDTEfd+tnRkB3/HJzpQqRTyofS2MPPkDn1mp3DBC8SoPDayokfAy+xKhF8+bwRCJO25Nea0YQ==
   dependencies:
     "@commitlint/format" "^19.5.0"
-    "@commitlint/lint" "^19.6.0"
+    "@commitlint/lint" "^19.7.1"
     "@commitlint/load" "^19.6.1"
     "@commitlint/read" "^19.5.0"
     "@commitlint/types" "^19.5.0"
     tinyexec "^0.3.0"
     yargs "^17.0.0"
 
-"@commitlint/config-conventional@^19.6.0":
-  version "19.6.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-19.6.0.tgz#badba72c8639ea79291e2941001bd7ea7fad3a2c"
-  integrity sha512-DJT40iMnTYtBtUfw9ApbsLZFke1zKh6llITVJ+x9mtpHD08gsNXaIRqHTmwTZL3dNX5+WoyK7pCN/5zswvkBCQ==
+"@commitlint/config-conventional@^19.7.1":
+  version "19.7.1"
+  resolved "https://registry.yarnpkg.com/@commitlint/config-conventional/-/config-conventional-19.7.1.tgz#9119a02ec8e0f4ac88f035e37dc333e7f69ace1c"
+  integrity sha512-fsEIF8zgiI/FIWSnykdQNj/0JE4av08MudLTyYHm4FlLWemKoQvPNUYU2M/3tktWcCEyq7aOkDDgtjrmgWFbvg==
   dependencies:
     "@commitlint/types" "^19.5.0"
     conventional-changelog-conventionalcommits "^7.0.2"
@@ -123,20 +123,20 @@
     "@commitlint/types" "^19.5.0"
     chalk "^5.3.0"
 
-"@commitlint/is-ignored@^19.6.0":
-  version "19.6.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/is-ignored/-/is-ignored-19.6.0.tgz#6adb9097d36b68e00b9c06a73d7a08e9f54c54dc"
-  integrity sha512-Ov6iBgxJQFR9koOupDPHvcHU9keFupDgtB3lObdEZDroiG4jj1rzky60fbQozFKVYRTUdrBGICHG0YVmRuAJmw==
+"@commitlint/is-ignored@^19.7.1":
+  version "19.7.1"
+  resolved "https://registry.yarnpkg.com/@commitlint/is-ignored/-/is-ignored-19.7.1.tgz#d3d713d97df4da5d0a6440624d0db38e3a67494e"
+  integrity sha512-3IaOc6HVg2hAoGleRK3r9vL9zZ3XY0rf1RsUf6jdQLuaD46ZHnXBiOPTyQ004C4IvYjSWqJwlh0/u2P73aIE3g==
   dependencies:
     "@commitlint/types" "^19.5.0"
     semver "^7.6.0"
 
-"@commitlint/lint@^19.6.0":
-  version "19.6.0"
-  resolved "https://registry.yarnpkg.com/@commitlint/lint/-/lint-19.6.0.tgz#f9fc9b11b808c96bd3f85e882e056daabac40c36"
-  integrity sha512-LRo7zDkXtcIrpco9RnfhOKeg8PAnE3oDDoalnrVU/EVaKHYBWYL1DlRR7+3AWn0JiBqD8yKOfetVxJGdEtZ0tg==
+"@commitlint/lint@^19.7.1":
+  version "19.7.1"
+  resolved "https://registry.yarnpkg.com/@commitlint/lint/-/lint-19.7.1.tgz#a180d5695fc5328b8566a482750df7fbf72b11c5"
+  integrity sha512-LhcPfVjcOcOZA7LEuBBeO00o3MeZa+tWrX9Xyl1r9PMd5FWsEoZI9IgnGqTKZ0lZt5pO3ZlstgnRyY1CJJc9Xg==
   dependencies:
-    "@commitlint/is-ignored" "^19.6.0"
+    "@commitlint/is-ignored" "^19.7.1"
     "@commitlint/parse" "^19.5.0"
     "@commitlint/rules" "^19.6.0"
     "@commitlint/types" "^19.5.0"
@@ -233,10 +233,10 @@
     enabled "2.0.x"
     kuler "^2.0.0"
 
-"@electric-sql/pglite@^0.2.0":
-  version "0.2.9"
-  resolved "https://registry.yarnpkg.com/@electric-sql/pglite/-/pglite-0.2.9.tgz#a76742cd3eee103b88d20539c205b8d149765920"
-  integrity sha512-KPItmBmPVZJGOv+qkCXmWyIPUPLQIyN+BVtV/zD+083aWSR/2ReaCUN+HJv6Jw4z9zJ00UCPQkeUXvOLuTlumg==
+"@electric-sql/pglite@^0.2.16":
+  version "0.2.16"
+  resolved "https://registry.yarnpkg.com/@electric-sql/pglite/-/pglite-0.2.16.tgz#df586341c8143ea997db0e51aae30c2dc1a634fa"
+  integrity sha512-dCSHpoOKuTxecaYhWDRp2yFTN3XWcMPMrBVl5yOR8VZEUprz4+R3iuU7BipmlsqBnBDO/6l9H/C2ZwJdunkWyw==
 
 "@esbuild/aix-ppc64@0.24.2":
   version "0.24.2"
@@ -1160,26 +1160,26 @@
   resolved "https://registry.yarnpkg.com/@humanwhocodes/object-schema/-/object-schema-2.0.3.tgz#4a2868d75d6d6963e423bcf90b7fd1be343409d3"
   integrity sha512-93zYdMES/c1D69yZiKDBj0V24vqNzB/koF26KPaagAfd3P/4gUlh3Dys5ogAK+Exi9QyzlD8x/08Zt7wIKcDcA==
 
-"@intlify/core-base@11.0.1":
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/@intlify/core-base/-/core-base-11.0.1.tgz#f84564a5bd313879b32cea70e6e3d2fe9e1f128b"
-  integrity sha512-NAmhw1l/llM0HZRpagR/ChJTNymW4ll6/4EDSJML5c8L5Hl/+k6UyF8EIgE6DeHpfheQujkSRngauViHqq6jJQ==
+"@intlify/core-base@11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@intlify/core-base/-/core-base-11.1.0.tgz#bb8244042768ac96ec3536392f48278b2e3c7f61"
+  integrity sha512-5KFrnfgcv4cVWzA1RC4HqMHYEWSD/69GQU7wpKJ2l6mA6ggqEjb9NJN5VJNJvP2mU5y8MAGwXLAJXJo5sbIkMQ==
   dependencies:
-    "@intlify/message-compiler" "11.0.1"
-    "@intlify/shared" "11.0.1"
+    "@intlify/message-compiler" "11.1.0"
+    "@intlify/shared" "11.1.0"
 
-"@intlify/message-compiler@11.0.1":
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/@intlify/message-compiler/-/message-compiler-11.0.1.tgz#7c159642e3a3c160dd25a15c17127c69d56b0561"
-  integrity sha512-5RFH8x+Mn3mbjcHXnb6KCXGiczBdiQkWkv99iiA0JpKrNuTAQeW59Pjq/uObMB0eR0shnKYGTkIJxum+DbL3sw==
+"@intlify/message-compiler@11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@intlify/message-compiler/-/message-compiler-11.1.0.tgz#d2ceba2fa1ed1578fa791759f696b583d346d9fb"
+  integrity sha512-UuV1YwWPBNgL4uqtC1vZPHF2QtYYqVeCDIsbV6JC6Vv90UWmEiU77U7EZmNVVV7DepT83Ow5MaF1CiWI77b61w==
   dependencies:
-    "@intlify/shared" "11.0.1"
+    "@intlify/shared" "11.1.0"
     source-map-js "^1.0.2"
 
-"@intlify/shared@11.0.1":
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/@intlify/shared/-/shared-11.0.1.tgz#25ff7f038bbae903e2bc75bf862b2380fde07cc8"
-  integrity sha512-lH164+aDDptHZ3dBDbIhRa1dOPQUp+83iugpc+1upTOWCnwyC1PVis6rSWNMMJ8VQxvtHQB9JMib48K55y0PvQ==
+"@intlify/shared@11.1.0":
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/@intlify/shared/-/shared-11.1.0.tgz#0f9126d1be2a40642c7ac8a1eed5f23ce82d3fe4"
+  integrity sha512-DvpNSxiMrFqYMaGSRDDnQgO/L0MqNH4KWw9CUx8LRHHIdWp08En9DpmSRNpauUOxKpHAhyJJxx92BHZk9J84EQ==
 
 "@isaacs/cliui@^8.0.2":
   version "8.0.2"
@@ -4562,12 +4562,12 @@ firebase-functions@^4.9.0:
     express "^4.17.1"
     protobufjs "^7.2.2"
 
-firebase-tools@^13.29.2:
-  version "13.29.2"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.29.2.tgz#30e6a22da541448eb8182eb40e0e39a1e5e4bcdf"
-  integrity sha512-6P4PR4TcrATPI+ut0qhh7gW3GJ0HYaLC2Fr5lesAXkrdAYw7OvOGDzXaRFuORwkCS5grVQuCcJVSsVbjXKAkew==
+firebase-tools@^13.29.3:
+  version "13.29.3"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-13.29.3.tgz#192aef4d6024b8aeaabee40cb0ad8eccd4e59cd6"
+  integrity sha512-P3d5+RjkhEmYhBP+5CGYD+Zi+eA5lLny/Ph5vGHAPUiJ7VKooiVtWf7fHw7LoXenlkCGPNaGfYVKqFz514+d7A==
   dependencies:
-    "@electric-sql/pglite" "^0.2.0"
+    "@electric-sql/pglite" "^0.2.16"
     "@google-cloud/cloud-sql-connector" "^1.3.3"
     "@google-cloud/pubsub" "^4.5.0"
     abort-controller "^3.0.0"
@@ -9771,13 +9771,13 @@ vue-eslint-parser@^9.4.3:
     lodash "^4.17.21"
     semver "^7.3.6"
 
-vue-i18n@^11.0.1:
-  version "11.0.1"
-  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-11.0.1.tgz#aa4c20d6f7c127bc46028ae3325659be47dd338e"
-  integrity sha512-pWAT8CusK8q9/EpN7V3oxwHwxWm6+Kp2PeTZmRGvdZTkUzMQDpbbmHp0TwQ8xw04XKm23cr6B4GL72y3W8Yekg==
+vue-i18n@^11.1.0:
+  version "11.1.0"
+  resolved "https://registry.yarnpkg.com/vue-i18n/-/vue-i18n-11.1.0.tgz#996095024da5cbb5148e602d7d88e0218ffe5fcc"
+  integrity sha512-UgtYUe99mLfo7ya5TJSsJcgJZaqIunwXjff5UA03xRry0VtgN4zIUbuoycK9/ZZQJg5Cmr6V6zq+u0H0P0hlNw==
   dependencies:
-    "@intlify/core-base" "11.0.1"
-    "@intlify/shared" "11.0.1"
+    "@intlify/core-base" "11.1.0"
+    "@intlify/shared" "11.1.0"
     "@vue/devtools-api" "^6.5.0"
 
 vue-router@^4.5.0:
@@ -9798,10 +9798,10 @@ vue@^3.5.13:
     "@vue/server-renderer" "3.5.13"
     "@vue/shared" "3.5.13"
 
-vuetify@^3.7.7:
-  version "3.7.7"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.7.7.tgz#f40e06abf81c426a29aee53e166fb7fcb05e98cd"
-  integrity sha512-YqKnRo2+BZWQRzfxHVA/5reQo1eLvbS9Z6N+Lvaot/5lpdi7JWooMr/hWoCr7/QPBGRcXArHppqIB+hMfPlsXw==
+vuetify@^3.7.9:
+  version "3.7.9"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.7.9.tgz#a06c7d79fe1ee592ce620729d988c868f4e653eb"
+  integrity sha512-9pHu6ESdg/lYYCrdXb2uoLZGbw2bysWLaqMu2bzQPMTrMj1GfgcL0k/siTGkUa+o0cVWzvlP/cnjOFGMTxH3og==
 
 wcwidth@^1.0.1:
   version "1.0.1"

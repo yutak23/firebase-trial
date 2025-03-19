@@ -114,15 +114,15 @@
   dependencies:
     tslib "^2.1.0"
 
-"@google-cloud/bigquery@^7.9.2":
-  version "7.9.2"
-  resolved "https://registry.yarnpkg.com/@google-cloud/bigquery/-/bigquery-7.9.2.tgz#470dd5b5a918ab2c3a87734fd18441bb906101d3"
-  integrity sha512-Yo7oYE6m7bBT28tYDn6dBwbXZxCt+nWREj/0y5aoUq0rFUGwLUDKAXwgt6OQJ2htDzGiQ3s0yltCBjKFtqVCmA==
+"@google-cloud/bigquery@^7.9.3":
+  version "7.9.3"
+  resolved "https://registry.yarnpkg.com/@google-cloud/bigquery/-/bigquery-7.9.3.tgz#b3340f7f493ba0c34ab1850eda0f9dc20c26ef9e"
+  integrity sha512-e0jvEwnEyvQeJOn5Twd429yr7T5/+3wR0rO0Vfe+3T25P0dRShhGyknlh/Ucoafa7WR4imFhW8+542yR4VkJ+w==
   dependencies:
     "@google-cloud/common" "^5.0.0"
     "@google-cloud/paginator" "^5.0.2"
     "@google-cloud/precise-date" "^4.0.0"
-    "@google-cloud/promisify" "^4.0.0"
+    "@google-cloud/promisify" "4.0.0"
     arrify "^2.0.1"
     big.js "^6.0.0"
     duplexify "^4.0.0"
@@ -183,7 +183,7 @@
   resolved "https://registry.yarnpkg.com/@google-cloud/projectify/-/projectify-4.0.0.tgz#d600e0433daf51b88c1fa95ac7f02e38e80a07be"
   integrity sha512-MmaX6HeSvyPbWGwFq7mXdo0uQZLGBYCwziiLIGq5JVX+/bdI3SAq6bP98trV5eTWfLuvsMcIC1YJOF2vfteLFA==
 
-"@google-cloud/promisify@^4.0.0":
+"@google-cloud/promisify@4.0.0", "@google-cloud/promisify@^4.0.0":
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/@google-cloud/promisify/-/promisify-4.0.0.tgz#a906e533ebdd0f754dca2509933334ce58b8c8b1"
   integrity sha512-Orxzlfb9c67A15cq2JQEyVc7wEsmFBmHjZWZYQMUyJ1qivXyMwdyNOs9odi79hze+2zqdTtu1E19IM/FtqZ10g==
@@ -346,10 +346,10 @@
   resolved "https://registry.yarnpkg.com/@rtsao/scc/-/scc-1.1.0.tgz#927dd2fae9bc3361403ac2c7a00c32ddce9ad7e8"
   integrity sha512-zt6OdqaDoOnJ1ZYsCYGt9YmWzDXl4vQdKTyJev62gFhRGKdx7mcT54V9KIjg+d2wi9EXsPvAPKe7i7WjfVWB8g==
 
-"@rushstack/eslint-patch@^1.10.5":
-  version "1.10.5"
-  resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.10.5.tgz#3a1c12c959010a55c17d46b395ed3047b545c246"
-  integrity sha512-kkKUDVlII2DQiKy7UstOR1ErJP8kUKAQ4oa+SQtM0K+lPdmmjj0YnnxBgtTVYH7mUKtbsxeFC9y0AmK7Yb78/A==
+"@rushstack/eslint-patch@^1.11.0":
+  version "1.11.0"
+  resolved "https://registry.yarnpkg.com/@rushstack/eslint-patch/-/eslint-patch-1.11.0.tgz#75dce8e972f90bba488e2b0cc677fb233aa357ab"
+  integrity sha512-zxnHvoMQVqewTJr/W4pKjF0bMGiKJv1WX7bSrkl46Hg0QjESbzBROWK0Wg4RphzSOS5Jiy7eFimmM3UgMrMZbQ==
 
 "@tootallnate/once@2":
   version "2.0.0"
@@ -1575,10 +1575,10 @@ firebase-admin@^13.2.0:
     "@google-cloud/firestore" "^7.11.0"
     "@google-cloud/storage" "^7.14.0"
 
-firebase-functions-test@^3.4.0:
-  version "3.4.0"
-  resolved "https://registry.yarnpkg.com/firebase-functions-test/-/firebase-functions-test-3.4.0.tgz#a353da802edcd84770dc890ee081a49477557ad4"
-  integrity sha512-ignkiegIvGtCbDZFEKerLrzrKGonCHD/VJsuNhcfz3jDfhP9yN7mJeq7AHXz8cOJaAnBnJ0WxHj3xezem2dEbw==
+firebase-functions-test@^3.4.1:
+  version "3.4.1"
+  resolved "https://registry.yarnpkg.com/firebase-functions-test/-/firebase-functions-test-3.4.1.tgz#243ccc093a0c06621ba72fd041e52f0bf886b4d5"
+  integrity sha512-qAq0oszrBGdf4bnCF6t4FoSgMsepeIXh0Pi/FhikSE6e+TvKKGpfrfUP/5pFjJZxFcLsweoau88KydCql4xSeg==
   dependencies:
     "@types/lodash" "^4.14.104"
     lodash "^4.17.5"

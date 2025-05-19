@@ -6,7 +6,7 @@
 	"private": true,
 	"type": "module",
 	"engines": {
-		"node": "20"
+		"node": "22"
 	},
 	"devDependencies": {
 		"@commitlint/cli": "^19.8.1",

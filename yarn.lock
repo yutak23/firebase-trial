@@ -5527,10 +5527,10 @@ firebase-functions@^6.3.2:
     express "^4.21.0"
     protobufjs "^7.2.2"
 
-firebase-tools@^14.12.0:
-  version "14.12.0"
-  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-14.12.0.tgz#3aad449ca2975354cdb21599b806d6b28b493661"
-  integrity sha512-uXyard+oJgnzYXOOt0asPHuLa8rTYhMJyxyXY7xjaY6RF3Oy3fJRq+c0axT5LaXrUzunkfDE6P6giBpuBTPIsA==
+firebase-tools@^14.12.1:
+  version "14.12.1"
+  resolved "https://registry.yarnpkg.com/firebase-tools/-/firebase-tools-14.12.1.tgz#9d5d6df3f97c3d65b749635db822715af526c82f"
+  integrity sha512-F4wZ/oXPVHfciLZh/Leq6uEh3LRrp9TsGPwcOFmMafO8c1HSXO25bOKxT7gHfvC2/3ftJt97+eSLTTgtGz4Zbw==
   dependencies:
     "@electric-sql/pglite" "^0.3.3"
     "@electric-sql/pglite-tools" "^0.2.8"
@@ -11515,10 +11515,10 @@ vue@^3.5.18:
     "@vue/server-renderer" "3.5.18"
     "@vue/shared" "3.5.18"
 
-vuetify@^3.9.4:
-  version "3.9.4"
-  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.9.4.tgz#25c2234c761cba65ac44f49836668c2ba6dc931c"
-  integrity sha512-OUdXVoThHUydJHyFsUHGxKxZ333hXKquRNn2ycqouO08ehi3005QE9tLPkwcBii4sAYZg7mADMRp7JbcNiNrTQ==
+vuetify@^3.9.5:
+  version "3.9.5"
+  resolved "https://registry.yarnpkg.com/vuetify/-/vuetify-3.9.5.tgz#7f5c79d3789051606f99f2e330ea3a2339ad7bb7"
+  integrity sha512-rJBSo1FeKcJJaqTfVHbOdpFXCmgeEIGzrh6HBEMGjSflan6voPIMSiK2dTCUU4t9JeghwvJtoAE5eBuqYIkFVA==
 
 wcwidth@^1.0.1:
   version "1.0.1"

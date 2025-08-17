@@ -26,7 +26,7 @@
 		"eslint-plugin-vue": "^9.33.0",
 		"eslint-plugin-vuetify": "^2.5.2",
 		"firebase": "^11.10.0",
-		"firebase-tools": "^14.12.0",
+		"firebase-tools": "^14.12.1",
 		"firebaseui": "^6.1.0",
 		"license-checker": "^25.0.1",
 		"lint-staged": "^16.1.5",
@@ -45,7 +45,7 @@
 		"vue": "^3.5.18",
 		"vue-i18n": "^11.1.11",
 		"vue-router": "^4.5.1",
-		"vuetify": "^3.9.4",
+		"vuetify": "^3.9.5",
 		"webfontloader": "^1.6.28"
 	},
 	"scripts": {

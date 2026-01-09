@@ -37,7 +37,7 @@
 		"prettier": "^3.6.2",
 		"sass": "^1.90.0",
 		"simple-git-hooks": "^2.13.1",
-		"snakecase-keys": "^8.1.0",
+		"snakecase-keys": "^9.0.2",
 		"vite": "^7.3.1",
 		"vite-plugin-eslint": "^1.8.1",
 		"vite-plugin-node-polyfills": "^0.24.0",

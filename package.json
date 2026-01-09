@@ -16,7 +16,7 @@
 		"@rushstack/eslint-patch": "^1.12.0",
 		"@vitejs/plugin-vue": "^5.2.4",
 		"@vue/eslint-config-prettier": "^9.0.0",
-		"@vuepic/vue-datepicker": "^11.0.2",
+		"@vuepic/vue-datepicker": "^12.1.0",
 		"camelcase-keys": "^9.1.3",
 		"crypto-js": "^4.2.0",
 		"eslint": "^8.57.1",

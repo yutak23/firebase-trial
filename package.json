@@ -32,7 +32,7 @@
 		"lint-staged": "^16.1.5",
 		"lodash": "^4.17.21",
 		"luxon": "^3.7.1",
-		"npm-check-updates": "^18.0.2",
+		"npm-check-updates": "^19.3.2",
 		"pinia": "^3.0.3",
 		"prettier": "^3.6.2",
 		"sass": "^1.90.0",

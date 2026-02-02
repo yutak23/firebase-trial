@@ -17,7 +17,7 @@
 		"@vitejs/plugin-vue": "^5.2.4",
 		"@vue/eslint-config-prettier": "^9.0.0",
 		"@vuepic/vue-datepicker": "^11.0.2",
-		"camelcase-keys": "^9.1.3",
+		"camelcase-keys": "^10.0.2",
 		"crypto-js": "^4.2.0",
 		"eslint": "^8.57.1",
 		"eslint-config-airbnb-base": "^15.0.0",

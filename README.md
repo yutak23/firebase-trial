@@ -55,6 +55,74 @@ App Engine のデフォルトサービスアカウントはプロジェクトレ
 `secretmanager.versions.access` はオーナーには含まれるが編集者・閲覧者には含まれないため、
 手順3の`シークレット アクセサー`の付与は必須。
 
+## CI からの Cloud Functions デプロイ
+
+`.github/workflows/deploy.yaml` が main への push と手動実行(`workflow_dispatch`)で
+`firebase deploy --only functions` を実行する。認証は Workload Identity 連携を使い、
+長期の認証情報は GitHub に置かない。
+
+### GCP 側のセットアップ（初回のみ）
+
+```bash
+PROJECT_ID=fir-cloud-functions-trial
+PROJECT_NUMBER=830437244276
+REPO=yutak23/firebase-trial
+SA=github-actions-deployer@${PROJECT_ID}.iam.gserviceaccount.com
+
+# デプロイ用サービスアカウント
+gcloud iam service-accounts create github-actions-deployer \
+  --project=$PROJECT_ID --display-name="GitHub Actions Deployer"
+
+# ロール付与
+for ROLE in \
+  roles/firebase.admin \
+  roles/cloudfunctions.admin \
+  roles/iam.serviceAccountUser \
+  roles/artifactregistry.writer \
+  roles/cloudbuild.builds.editor \
+  roles/serviceusage.serviceUsageConsumer \
+  roles/secretmanager.admin
+do
+  gcloud projects add-iam-policy-binding $PROJECT_ID \
+    --member="serviceAccount:${SA}" --role="$ROLE"
+done
+
+# Workload Identity プール / プロバイダ（attribute-condition は必須）
+gcloud iam workload-identity-pools create github \
+  --project=$PROJECT_ID --location=global --display-name="GitHub Actions Pool"
+
+gcloud iam workload-identity-pools providers create-oidc firebase-trial \
+  --project=$PROJECT_ID --location=global \
+  --workload-identity-pool=github --display-name="firebase-trial" \
+  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.repository_owner=assertion.repository_owner" \
+  --attribute-condition="assertion.repository_owner == 'yutak23'" \
+  --issuer-uri="https://token.actions.githubusercontent.com"
+
+# このリポジトリからのみ SA を借用できるようにバインド
+gcloud iam service-accounts add-iam-policy-binding $SA \
+  --project=$PROJECT_ID --role=roles/iam.workloadIdentityUser \
+  --member="principalSet://iam.googleapis.com/projects/${PROJECT_NUMBER}/locations/global/workloadIdentityPools/github/attribute.repository/${REPO}"
+```
+
+`iam.serviceAccountUser` はランタイムSAとして関数を動かすため、`secretmanager.admin` は
+デプロイ時に `GEMINI_API_KEY` のバージョン解決とバインドを行うために必要。
+
+### GitHub 側のセットアップ
+
+`Settings` →`Secrets and variables` →`Actions` →`Variables`タブに登録する
+（秘密情報ではないので Secrets ではなく Variables）。
+
+| 名前                             | 値                                                                                             |
+| -------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `GCP_WORKLOAD_IDENTITY_PROVIDER` | `projects/830437244276/locations/global/workloadIdentityPools/github/providers/firebase-trial` |
+| `GCP_DEPLOY_SERVICE_ACCOUNT`     | `github-actions-deployer@fir-cloud-functions-trial.iam.gserviceaccount.com`                    |
+
+### デプロイ対象について
+
+CI では `--only functions` のみを対象にしている。BigQuery 拡張機能5個は CI で触ると
+パラメータ入力待ちや意図しない再構成のリスクがあるため除外している。
+Hosting は Cloudflare Pages なので元々対象外。
+
 ## システム構成
 
 - Hosting  

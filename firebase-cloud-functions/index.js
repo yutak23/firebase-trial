@@ -7,6 +7,7 @@ import lodash from 'lodash';
 // eslint-disable-next-line import/extensions
 import md5 from 'crypto-js/md5.js';
 import { BigQuery } from '@google-cloud/bigquery';
+import { GoogleGenAI, Type } from '@google/genai';
 
 const { omit } = lodash;
 const isLocal = process.env.NODE_ENV === 'local';
@@ -193,6 +194,156 @@ export const replyInvite = functions
 		// TODO rejectの場合を実装
 
 		return { type };
+	});
+
+// レシート画像から家計簿の入力内容を推定する
+const RECEIPT_MODEL = 'gemini-2.5-flash';
+const RECEIPT_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
+const RECEIPT_MAX_IMAGE_BYTES = 2 * 1024 * 1024;
+const RECEIPT_CATEGORIES = [
+	'food_expenses',
+	'commodity_expenses',
+	'medical_expense',
+	'clothing_expenses',
+	'transportation_expenses',
+	'rent_expenses',
+	'utilities_expense',
+	'maternity_baby_expense',
+	'another_expense'
+];
+const RECEIPT_PROMPT = `あなたは日本語のレシートを読み取るアシスタントです。
+添付されたレシート画像から以下の情報を抽出し、JSONで返してください。
+
+- totalPrice: 実際に支払った金額（円、整数）。
+  「合計」「お買上計」「税込合計」などの行を採用すること。
+  「小計」「課税対象額」「お預り」「お釣り」「ポイント」は採用しないこと。
+  クーポンや値引きが適用されている場合は、値引き後の実支払額を採用すること。
+  画像がレシートではない、または金額が読み取れない場合は 0 にすること。
+- date: レシートの発行日を yyyy-MM-dd 形式で。読み取れない場合は空文字にすること。
+  和暦の場合は西暦に変換すること。
+- storeName: 店舗の屋号のみ。支店名・住所・電話番号・法人格は含めないこと。
+  読み取れない場合は空文字にすること。
+- category: 購入内容から最も近いものを次のIDから1つだけ選ぶこと。
+  food_expenses（食費）, commodity_expenses（日用品費）, medical_expense（医療費）,
+  clothing_expenses（服飾費）, transportation_expenses（交通費）, rent_expenses（家賃）,
+  utilities_expense（水道光熱費）, maternity_baby_expense（妊婦/Baby費）,
+  another_expense（その他）
+  判断できない場合は another_expense にすること。`;
+
+const genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+
+// モデルの出力は信用せず、アプリが扱える値に丸めてから返す
+const sanitizeReceipt = (parsed) => {
+	const price =
+		Number.isInteger(parsed.totalPrice) && parsed.totalPrice > 0
+			? parsed.totalPrice
+			: null;
+
+	const date =
+		typeof parsed.date === 'string' &&
+		/^\d{4}-\d{2}-\d{2}$/.test(parsed.date) &&
+		!Number.isNaN(new Date(parsed.date).getTime())
+			? parsed.date
+			: null;
+
+	const storeName =
+		typeof parsed.storeName === 'string' && parsed.storeName.trim() !== ''
+			? parsed.storeName.trim().slice(0, 100)
+			: null;
+
+	const category = RECEIPT_CATEGORIES.includes(parsed.category)
+		? parsed.category
+		: 'another_expense';
+
+	return { date, storeName, price, category };
+};
+
+export const scanReceipt = functions
+	.region('asia-northeast1')
+	.runWith({
+		enforceAppCheck: true,
+		secrets: ['GEMINI_API_KEY'],
+		memory: '512MB',
+		timeoutSeconds: 60
+	})
+	.https.onCall(async (data, context) => {
+		// エミュレータではApp Checkが検証されずcontext.appがundefinedになる
+		if (!isLocal && context.app === undefined) {
+			throw new functions.https.HttpsError(
+				'failed-precondition',
+				'The function must be called from an App Check verified app.'
+			);
+		}
+
+		if (!context.auth)
+			throw new functions.https.HttpsError(
+				'unauthenticated',
+				'The function must be called while authenticated.'
+			);
+
+		if (
+			!('imageBase64' in data) ||
+			typeof data.imageBase64 !== 'string' ||
+			data.imageBase64 === '' ||
+			!('mimeType' in data) ||
+			!RECEIPT_MIME_TYPES.includes(data.mimeType)
+		)
+			throw new functions.https.HttpsError(
+				'invalid-argument',
+				'invalid request.'
+			);
+
+		const { imageBase64, mimeType } = data;
+
+		// base64は元データの約4/3の長さになる
+		if ((imageBase64.length * 3) / 4 > RECEIPT_MAX_IMAGE_BYTES)
+			throw new functions.https.HttpsError(
+				'invalid-argument',
+				'image is too large.'
+			);
+
+		let parsed;
+		try {
+			const response = await genAi.models.generateContent({
+				model: RECEIPT_MODEL,
+				contents: [
+					{ inlineData: { data: imageBase64, mimeType } },
+					{ text: RECEIPT_PROMPT }
+				],
+				config: {
+					responseMimeType: 'application/json',
+					responseSchema: {
+						type: Type.OBJECT,
+						properties: {
+							date: { type: Type.STRING },
+							storeName: { type: Type.STRING },
+							totalPrice: { type: Type.INTEGER },
+							category: { type: Type.STRING }
+						},
+						required: ['date', 'storeName', 'totalPrice', 'category'],
+						propertyOrdering: ['date', 'storeName', 'totalPrice', 'category']
+					}
+				}
+			});
+			parsed = JSON.parse(response.text);
+		} catch (e) {
+			// 画像や抽出結果自体はログに残さない
+			functions.logger.error('scanReceipt failure', e);
+			throw new functions.https.HttpsError(
+				'internal',
+				'failed to scan receipt.'
+			);
+		}
+
+		const result = sanitizeReceipt(parsed);
+
+		functions.logger.info(
+			'scanReceipt success',
+			`uid: ${context.auth.uid}`,
+			`detected: ${result.price !== null}`
+		);
+
+		return result;
 	});
 
 // 検証用 テンポラリー

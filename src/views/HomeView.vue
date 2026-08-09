@@ -21,6 +21,8 @@ import '@vuepic/vue-datepicker/dist/main.css';
 import { db } from '@/firebase';
 import { converter } from '@/firebase/store';
 import { fetchGroupMembers } from '@/service/group-service';
+import { scanReceipt } from '@/service/receipt-service';
+import { fileToResizedBase64 } from '@/utils/image';
 
 const { t } = useI18n();
 const props = defineProps({
@@ -114,6 +116,48 @@ const cateories = computed(() => [
 		value: 'another_expense'
 	}
 ]);
+const receiptInput = ref(null);
+const scanning = ref(false);
+const scanError = ref(null);
+const openReceiptInput = () => {
+	receiptInput.value.click();
+};
+// レシートを読み取ってフォームを埋めるだけで、登録はユーザーの操作に任せる
+const onReceiptSelected = async (event) => {
+	const file = event.target.files[0];
+	receiptInput.value.value = ''; // 同じ写真を選び直せるようにする
+	if (!file) return;
+
+	scanning.value = true;
+	scanError.value = null;
+	try {
+		const { imageBase64, mimeType } = await fileToResizedBase64(file);
+		const result = await scanReceipt({ imageBase64, mimeType });
+
+		// レシートとして何も読み取れなかった場合はフォームを書き換えない
+		if (!result.price && !result.date && !result.storeName) {
+			scanError.value = t('groups.add_book_data_dialog.receipt.not_found');
+			return;
+		}
+
+		const scannedDate = result.date
+			? DateTime.fromFormat(result.date, 'yyyy-MM-dd')
+			: null;
+		if (scannedDate && scannedDate.isValid) book.date = scannedDate.toJSDate();
+		if (result.price) book.price = result.price;
+		if (result.category) book.cateory = result.category;
+		if (result.storeName && !book.memo) book.memo = result.storeName;
+
+		if (!result.price)
+			scanError.value = t('groups.add_book_data_dialog.receipt.not_found');
+	} catch (e) {
+		console.error(e);
+		scanError.value = t('groups.add_book_data_dialog.receipt.error');
+	} finally {
+		scanning.value = false;
+	}
+};
+
 const create = () => {
 	Object.keys(book).forEach((key) => {
 		if (key === 'date') {
@@ -122,6 +166,7 @@ const create = () => {
 		}
 		book[key] = null;
 	});
+	scanError.value = null;
 	openBookDataDialog();
 };
 
@@ -191,6 +236,7 @@ const getAllCurrentData = async (options = {}) => {
 	if (options.loading) closeLoading();
 };
 const edit = (v) => {
+	scanError.value = null;
 	book.id = v.id;
 	book.date = v.date;
 	book.price = v.price;
@@ -362,6 +408,35 @@ await getAllCurrentData();
 				<v-card-text>
 					<v-form ref="form">
 						<v-row>
+							<v-col cols="12" class="pb-0">
+								<v-btn
+									block
+									variant="tonal"
+									prepend-icon="mdi-camera"
+									:loading="scanning"
+									@click="openReceiptInput"
+								>
+									{{ $t('groups.add_book_data_dialog.receipt.button') }}
+								</v-btn>
+								<!-- スマホでカメラを直接起動するため v-file-input ではなく input を使う -->
+								<input
+									ref="receiptInput"
+									type="file"
+									accept="image/*"
+									capture="environment"
+									class="d-none"
+									@change="onReceiptSelected"
+								/>
+								<v-alert
+									v-if="scanError"
+									type="warning"
+									density="compact"
+									variant="tonal"
+									class="mt-2"
+								>
+									{{ scanError }}
+								</v-alert>
+							</v-col>
 							<v-col cols="12">
 								<v-text-field
 									v-model="dispalyDate"

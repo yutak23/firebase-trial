@@ -23,7 +23,12 @@
 				"maternity_baby_expense": "妊婦/Baby費",
 				"another_expense": "その他"
 			},
-			"member": { "joint": "共同" }
+			"member": { "joint": "共同" },
+			"receipt": {
+				"button": "レシートを撮影して自動入力",
+				"not_found": "レシートから金額を読み取れませんでした。手入力してください",
+				"error": "レシートの解析に失敗しました。もう一度お試しください"
+			}
 		}
 	},
 	"$vuetify": {

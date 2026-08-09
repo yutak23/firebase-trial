@@ -3,12 +3,28 @@
 以下を検証。
 
 - firebase emulators を使った開発
-
   - auth
   - functions
   - firestore
 
 - firebase deploy でインフラ構築
+
+## レシート撮影による自動入力
+
+家計簿の登録ダイアログでレシートを撮影すると、日付・金額・カテゴリ・店名（メモ）を自動補完する。
+画像は解析に使うだけで保存しない。
+
+解析は Cloud Functions の `scanReceipt`（callable, App Check 必須）から Gemini API を呼んで行うため、
+API キーの設定が必要。
+
+- [Google AI Studio](https://aistudio.google.com/apikey) で API キーを取得
+
+- ローカル（エミュレータ）  
+  `firebase-cloud-functions/.env.local` に `GEMINI_API_KEY=<取得したキー>` を記載（gitignore 済み）
+
+- 本番  
+  `npx firebase functions:secrets:set GEMINI_API_KEY` でシークレットを登録してから
+  `yarn deploy:exclude:hosting` でデプロイ
 
 ## システム構成
 

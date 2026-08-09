@@ -67,6 +67,7 @@ node_modules/
 
 # Firebase Cloud Functions のエミュレータ用シークレット
 firebase-cloud-functions/.env.local
+firebase-cloud-functions/.secret.local
 
 # Node
 **/node_modules/*

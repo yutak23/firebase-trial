@@ -20,7 +20,9 @@ API キーの設定が必要。
 - [Google AI Studio](https://aistudio.google.com/apikey) で API キーを取得
 
 - ローカル（エミュレータ）  
-  `firebase-cloud-functions/.env.local` に `GEMINI_API_KEY=<取得したキー>` を記載（gitignore 済み）
+  `firebase-cloud-functions/.secret.local` に `GEMINI_API_KEY=<取得したキー>` を記載（gitignore 済み）。
+  `runWith({ secrets: [...] })` で宣言したシークレットは `.env.local` からは読み込まれず、
+  エミュレータは `.secret.local` を参照する
 
 - 本番  
   `npx firebase functions:secrets:set GEMINI_API_KEY` でシークレットを登録してから

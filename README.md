@@ -39,13 +39,19 @@ GCP コンソールから設定できる。コード側の変更は不要
    を開く（初回は Secret Manager API の有効化が必要）
 2. `シークレットを作成`をクリックし、名前に `GEMINI_API_KEY`（コード内の参照名と完全一致させる）、
    値に取得した API キーを入力して作成
-3. Cloud Functions のランタイムサービスアカウント
-   `fir-cloud-functions-trial@appspot.gserviceaccount.com` に
-   `Secret Manager のシークレット アクセサー`(`roles/secretmanager.secretAccessor`)が
-   付与されているかを、該当シークレットの`権限`タブで確認する
-   （デプロイ時に自動付与されることが多いが、付かない場合がある）
+3. 作成したシークレットの`権限`タブ →`アクセスを許可`で、Cloud Functions の
+   ランタイムサービスアカウント `fir-cloud-functions-trial@appspot.gserviceaccount.com` に
+   `Secret Manager のシークレット アクセサー`(`roles/secretmanager.secretAccessor`)を付与する。
+   `ロール別に表示`に切り替えて`シークレット アクセサー`の下に当該サービスアカウントが
+   入っていれば設定完了
 4. `yarn deploy:exclude:hosting` でデプロイし、Cloud Functions のログに
    `scanReceipt` の起動エラー（シークレット参照失敗）が出ていないことを確認
+
+App Engine のデフォルトサービスアカウントはプロジェクトレベルで`編集者`を継承しているため、
+権限タブに`編集者`として表示されることがあるが、**これではシークレットの値を読めない**。
+[公式ドキュメント](https://docs.cloud.google.com/secret-manager/docs/access-control)のとおり
+`secretmanager.versions.access` はオーナーには含まれるが編集者・閲覧者には含まれないため、
+手順3の`シークレット アクセサー`の付与は必須。
 
 ## システム構成
 

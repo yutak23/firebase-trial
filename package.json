@@ -46,7 +46,7 @@
 		"vue": "^3.5.18",
 		"vue-i18n": "^11.1.11",
 		"vue-router": "^5.2.0",
-		"vuetify": "^3.9.5",
+		"vuetify": "^4.1.8",
 		"webfontloader": "^1.6.28"
 	},
 	"scripts": {

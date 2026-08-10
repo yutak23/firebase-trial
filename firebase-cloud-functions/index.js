@@ -238,6 +238,22 @@ const getGenAi = () => {
 	return genAi;
 };
 
+// クエリパラメータのAPIキーなど、詳細を返す際に漏れると困る値を伏せる
+const redactSecrets = (message) =>
+	message.replace(/(key|token|apikey|api_key)=[^&\s"']+/gi, '$1=***');
+
+// 画面側で原因を切り分けられるよう、機微情報を含まない範囲でエラーの概要を返す
+const toErrorDetail = (stage, e, extra = {}) => ({
+	stage,
+	name: typeof e?.name === 'string' ? e.name : 'Error',
+	status: e?.status ?? e?.code ?? null,
+	message:
+		typeof e?.message === 'string'
+			? redactSecrets(e.message).slice(0, 500)
+			: '',
+	...extra
+});
+
 // モデルの出力は信用せず、アプリが扱える値に丸めてから返す
 const sanitizeReceipt = (parsed) => {
 	const price =
@@ -308,9 +324,9 @@ export const scanReceipt = functions
 				'image is too large.'
 			);
 
-		let parsed;
+		let response;
 		try {
-			const response = await getGenAi().models.generateContent({
+			response = await getGenAi().models.generateContent({
 				model: RECEIPT_MODEL,
 				contents: [
 					{ inlineData: { data: imageBase64, mimeType } },
@@ -331,13 +347,32 @@ export const scanReceipt = functions
 					}
 				}
 			});
-			parsed = JSON.parse(response.text);
 		} catch (e) {
 			// 画像や抽出結果自体はログに残さない
-			functions.logger.error('scanReceipt failure', e);
+			functions.logger.error('scanReceipt gemini failure', e);
 			throw new functions.https.HttpsError(
 				'internal',
-				'failed to scan receipt.'
+				'failed to call the model.',
+				toErrorDetail('gemini', e, { model: RECEIPT_MODEL })
+			);
+		}
+
+		let parsed;
+		try {
+			parsed = JSON.parse(response.text);
+		} catch (e) {
+			// 安全性フィルタやトークン上限で本文が空になることがあるため、
+			// 応答自体は残さず切り分けに必要な情報だけを返す
+			functions.logger.error('scanReceipt parse failure', e);
+			throw new functions.https.HttpsError(
+				'internal',
+				'failed to parse the model response.',
+				toErrorDetail('parse', e, {
+					finishReason: response?.candidates?.[0]?.finishReason ?? null,
+					blockReason: response?.promptFeedback?.blockReason ?? null,
+					textLength:
+						typeof response?.text === 'string' ? response.text.length : 0
+				})
 			);
 		}
 

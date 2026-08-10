@@ -7,7 +7,12 @@ const fileToResizedBase64 = async (file, options = {}) => {
 		bitmap = await createImageBitmap(file);
 	} catch (e) {
 		// HEICなどブラウザがデコードできない形式
-		throw new Error('unsupported image format');
+		const error = new Error(
+			`unsupported image format: ${file.type || 'unknown'} (${e.message})`,
+			{ cause: e }
+		);
+		error.code = 'image/unsupported-format';
+		throw error;
 	}
 
 	const scale = Math.min(1, maxEdge / Math.max(bitmap.width, bitmap.height));

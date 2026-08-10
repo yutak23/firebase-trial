@@ -46,6 +46,9 @@ const bookDataDialog = ref(false);
 let formInstanceId = 0;
 const scanning = ref(false);
 const scanError = ref(null);
+// 定型文だけでは原因が分からないため、切り分け用の詳細も画面に出す
+const scanErrorDetail = ref(null);
+const scanErrorDetailCopied = ref(false);
 const datePickDialog = ref(false);
 const datepicker = ref(null);
 // VueDatePicker v12 の locale は文字列ではなく date-fns のロケールを受け取る
@@ -57,6 +60,8 @@ const openBookDataDialog = () => {
 	formInstanceId += 1; // 進行中のスキャン結果を無効化する
 	scanning.value = false;
 	scanError.value = null;
+	scanErrorDetail.value = null;
+	scanErrorDetailCopied.value = false;
 	bookDataDialog.value = true;
 	bottomNavigation.value = null;
 };
@@ -133,6 +138,33 @@ const receiptInput = ref(null);
 const openReceiptInput = () => {
 	receiptInput.value.click();
 };
+// 画面だけで原因を追えるように、callableのcode/message/detailsを組み立てる
+const toScanErrorDetail = (e) => {
+	const lines = [`time: ${DateTime.now().toISO()}`];
+
+	if (e?.code) lines.push(`code: ${e.code}`);
+	lines.push(`message: ${e?.message ?? String(e)}`);
+
+	// Cloud Functions が HttpsError に付けた details をそのまま出す
+	const details = e?.details;
+	if (details !== undefined && details !== null)
+		lines.push(
+			`details: ${
+				typeof details === 'string' ? details : JSON.stringify(details)
+			}`
+		);
+
+	return lines.join('\n');
+};
+const copyScanErrorDetail = async () => {
+	// スマホでは長文を選択しづらいため、コピーできるようにする
+	try {
+		await navigator.clipboard.writeText(scanErrorDetail.value);
+		scanErrorDetailCopied.value = true;
+	} catch (e) {
+		scanErrorDetailCopied.value = false;
+	}
+};
 // レシートを読み取ってフォームを埋めるだけで、登録はユーザーの操作に任せる
 const onReceiptSelected = async (event) => {
 	const file = event.target.files[0];
@@ -146,6 +178,8 @@ const onReceiptSelected = async (event) => {
 
 	scanning.value = true;
 	scanError.value = null;
+	scanErrorDetail.value = null;
+	scanErrorDetailCopied.value = false;
 	try {
 		const { imageBase64, mimeType } = await fileToResizedBase64(file);
 		if (isStale()) return;
@@ -173,6 +207,7 @@ const onReceiptSelected = async (event) => {
 		if (isStale()) return;
 		console.error(e);
 		scanError.value = t('groups.add_book_data_dialog.receipt.error');
+		scanErrorDetail.value = toScanErrorDetail(e);
 	} finally {
 		// 古いスキャンが後発スキャンのローディング状態を消さないようにする
 		if (!isStale()) scanning.value = false;
@@ -454,6 +489,32 @@ await getAllCurrentData();
 									class="mt-2"
 								>
 									{{ scanError }}
+									<template v-if="scanErrorDetail">
+										<div class="text-caption mt-2">
+											{{
+												$t('groups.add_book_data_dialog.receipt.error_detail')
+											}}
+										</div>
+										<pre class="receipt-error-detail">{{
+											scanErrorDetail
+										}}</pre>
+										<v-btn
+											size="x-small"
+											variant="text"
+											density="comfortable"
+											class="px-0"
+											prepend-icon="mdi-content-copy"
+											@click="copyScanErrorDetail"
+										>
+											{{
+												scanErrorDetailCopied
+													? $t('groups.add_book_data_dialog.receipt.copied')
+													: $t(
+															'groups.add_book_data_dialog.receipt.copy_detail'
+														)
+											}}
+										</v-btn>
+									</template>
 								</v-alert>
 							</v-col>
 							<v-col cols="12">
@@ -553,4 +614,10 @@ await getAllCurrentData();
 <style scoped lang="sass">
 .v-bottom-navigation
 	position: fixed !important
+
+.receipt-error-detail
+	margin: 0
+	font-size: 0.7rem
+	white-space: pre-wrap
+	word-break: break-all
 </style>

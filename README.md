@@ -69,6 +69,11 @@ PROJECT_NUMBER=830437244276
 REPO=yutak23/firebase-trial
 SA=github-actions-deployer@${PROJECT_ID}.iam.gserviceaccount.com
 
+# Cloud Billing API（Firebase CLI が functions デプロイ時に課金状態を確認するため必要）
+# cloudfunctions / cloudbuild / artifactregistry / secretmanager は CLI が自動で
+# 有効化するが、これだけは事前に有効化しておく必要がある
+gcloud services enable cloudbilling.googleapis.com --project=$PROJECT_ID
+
 # デプロイ用サービスアカウント
 gcloud iam service-accounts create github-actions-deployer \
   --project=$PROJECT_ID --display-name="GitHub Actions Deployer"

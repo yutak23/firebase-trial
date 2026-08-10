@@ -107,6 +107,36 @@ gcloud iam service-accounts add-iam-policy-binding $SA \
 `iam.serviceAccountUser` はランタイムSAとして関数を動かすため、`secretmanager.admin` は
 デプロイ時に `GEMINI_API_KEY` のバージョン解決とバインドを行うために必要。
 
+### プールやプロバイダが既に存在する場合
+
+`ALREADY_EXISTS` が返る場合、`create` は既存の設定を上書きしないため、中身が
+意図したものになっているかを確認する。特に `attributeMapping` に
+`attribute.repository` が無いと、上記のバインドと一致せず認証に失敗する。
+
+```bash
+gcloud iam workload-identity-pools providers describe firebase-trial \
+  --project=$PROJECT_ID --location=global --workload-identity-pool=github \
+  --format="yaml(attributeMapping, attributeCondition, state, disabled, oidc)"
+
+# デプロイSAに実際に付いているロールの一覧
+gcloud projects get-iam-policy $PROJECT_ID \
+  --flatten="bindings[].members" \
+  --filter="bindings.members:${SA}" \
+  --format="value(bindings.role)"
+```
+
+設定が異なっていれば `update-oidc` で合わせる。
+
+```bash
+gcloud iam workload-identity-pools providers update-oidc firebase-trial \
+  --project=$PROJECT_ID --location=global --workload-identity-pool=github \
+  --attribute-mapping="google.subject=assertion.sub,attribute.repository=assertion.repository,attribute.repository_owner=assertion.repository_owner" \
+  --attribute-condition="assertion.repository_owner == 'yutak23'"
+```
+
+`state` が `DELETED` の場合は削除済みの名前が30日間予約されている状態。
+`undelete` するか、別名で作り直してバインドと GitHub Variables を貼り替える。
+
 ### GitHub 側のセットアップ
 
 `Settings` →`Secrets and variables` →`Actions` →`Variables`タブに登録する

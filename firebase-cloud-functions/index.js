@@ -230,7 +230,13 @@ const RECEIPT_PROMPT = `あなたは日本語のレシートを読み取るア�
   another_expense（その他）
   判断できない場合は another_expense にすること。`;
 
-const genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+// デプロイ時のソース解析ではシークレットが注入されないため、
+// モジュール読み込み時ではなく最初の呼び出し時にクライアントを生成する
+let genAi = null;
+const getGenAi = () => {
+	if (!genAi) genAi = new GoogleGenAI({ apiKey: process.env.GEMINI_API_KEY });
+	return genAi;
+};
 
 // モデルの出力は信用せず、アプリが扱える値に丸めてから返す
 const sanitizeReceipt = (parsed) => {
@@ -304,7 +310,7 @@ export const scanReceipt = functions
 
 		let parsed;
 		try {
-			const response = await genAi.models.generateContent({
+			const response = await getGenAi().models.generateContent({
 				model: RECEIPT_MODEL,
 				contents: [
 					{ inlineData: { data: imageBase64, mimeType } },

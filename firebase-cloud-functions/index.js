@@ -197,7 +197,9 @@ export const replyInvite = functions
 	});
 
 // レシート画像から家計簿の入力内容を推定する
-const RECEIPT_MODEL = 'gemini-2.5-flash';
+// gemini-2.5-flash は新規ユーザーには提供されなくなり404になるため、後継モデルを使う
+// （ListModelsには残るが generateContent すると NOT_FOUND になる）
+const RECEIPT_MODEL = 'gemini-3.6-flash';
 const RECEIPT_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const RECEIPT_MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 const RECEIPT_CATEGORIES = [

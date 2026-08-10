@@ -55,6 +55,26 @@ App Engine のデフォルトサービスアカウントはプロジェクトレ
 `secretmanager.versions.access` はオーナーには含まれるが編集者・閲覧者には含まれないため、
 手順3の`シークレット アクセサー`の付与は必須。
 
+### 解析に失敗する場合
+
+失敗時は登録ダイアログのアラートにエラーの詳細（`code` / `message` / `details`）が表示されるので、
+まずそれを見る。`details.stage` が `gemini` ならモデル呼び出し、`parse` なら応答の解析で失敗している。
+
+`404 NOT_FOUND` が出る場合はモデルが使えなくなっている可能性がある。
+古いモデルは ListModels には残ったまま、`generateContent` すると
+`This model ... is no longer available to new users` で 404 になることがある
+（`gemini-2.5-flash` がこれに該当したため `index.js` の `RECEIPT_MODEL` を差し替えた）。
+実際に使えるモデルは以下で確認できる。
+
+```bash
+curl -s -H "x-goog-api-key: $GEMINI_API_KEY" \
+  "https://generativelanguage.googleapis.com/v1beta/models?pageSize=200" \
+  | jq -r '.models[] | select(.supportedGenerationMethods[]? == "generateContent") | .name'
+```
+
+ただしこのリストに載っていても上記の理由で 404 になることがあるため、
+差し替え後は実際に 1 回呼び出して確認すること。
+
 ## CI からの Cloud Functions デプロイ
 
 `.github/workflows/deploy.yaml` が main への push と手動実行(`workflow_dispatch`)で

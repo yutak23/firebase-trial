@@ -41,9 +41,16 @@ const closeLoading = () => {
 const bottomNavigation = ref(false);
 
 const bookDataDialog = ref(false);
+// ダイアログを開き直すたびに採番し、進行中のスキャンの結果を破棄するために使う
+let formInstanceId = 0;
+const scanning = ref(false);
+const scanError = ref(null);
 const datePickDialog = ref(false);
 const datepicker = ref(null);
 const openBookDataDialog = () => {
+	formInstanceId += 1; // 進行中のスキャン結果を無効化する
+	scanning.value = false;
+	scanError.value = null;
 	bookDataDialog.value = true;
 	bottomNavigation.value = null;
 };
@@ -117,8 +124,6 @@ const cateories = computed(() => [
 	}
 ]);
 const receiptInput = ref(null);
-const scanning = ref(false);
-const scanError = ref(null);
 const openReceiptInput = () => {
 	receiptInput.value.click();
 };
@@ -128,11 +133,19 @@ const onReceiptSelected = async (event) => {
 	receiptInput.value.value = ''; // 同じ写真を選び直せるようにする
 	if (!file) return;
 
+	// 解析中にダイアログを閉じて別のフォームを開かれた場合、
+	// 遅れて届いた結果で今のフォームを書き換えないようにする
+	const scanTarget = formInstanceId;
+	const isStale = () => scanTarget !== formInstanceId || !bookDataDialog.value;
+
 	scanning.value = true;
 	scanError.value = null;
 	try {
 		const { imageBase64, mimeType } = await fileToResizedBase64(file);
+		if (isStale()) return;
+
 		const result = await scanReceipt({ imageBase64, mimeType });
+		if (isStale()) return;
 
 		// レシートとして何も読み取れなかった場合はフォームを書き換えない
 		if (!result.price && !result.date && !result.storeName) {
@@ -151,10 +164,12 @@ const onReceiptSelected = async (event) => {
 		if (!result.price)
 			scanError.value = t('groups.add_book_data_dialog.receipt.not_found');
 	} catch (e) {
+		if (isStale()) return;
 		console.error(e);
 		scanError.value = t('groups.add_book_data_dialog.receipt.error');
 	} finally {
-		scanning.value = false;
+		// 古いスキャンが後発スキャンのローディング状態を消さないようにする
+		if (!isStale()) scanning.value = false;
 	}
 };
 
@@ -166,7 +181,6 @@ const create = () => {
 		}
 		book[key] = null;
 	});
-	scanError.value = null;
 	openBookDataDialog();
 };
 
@@ -236,7 +250,6 @@ const getAllCurrentData = async (options = {}) => {
 	if (options.loading) closeLoading();
 };
 const edit = (v) => {
-	scanError.value = null;
 	book.id = v.id;
 	book.date = v.date;
 	book.price = v.price;

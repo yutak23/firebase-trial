@@ -20,6 +20,12 @@ module.exports = {
 					'@': './src'
 				},
 				extensions: ['.js', '.vue']
+			},
+			// pinia などの exports フィールドのみを持つパッケージは
+			// custom-alias が内部で使う古い node リゾルバでは解決できないため、
+			// exports 対応の node リゾルバをフォールバックとして併用する
+			node: {
+				extensions: ['.mjs', '.js', '.json', '.node', '.vue']
 			}
 		}
 	},

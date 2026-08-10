@@ -242,17 +242,36 @@ const getGenAi = () => {
 const redactSecrets = (message) =>
 	message.replace(/(key|token|apikey|api_key)=[^&\s"']+/gi, '$1=***');
 
+// @google/genai の ApiError は message にレスポンスボディのJSON文字列をそのまま入れるため、
+// 画面で読める形になるよう中身を取り出す
+// 例: {"error":{"code":404,"message":"models/... is not found ...","status":"NOT_FOUND"}}
+const unwrapApiErrorMessage = (message) => {
+	try {
+		const { error } = JSON.parse(message);
+		if (!error || typeof error.message !== 'string') return null;
+		return {
+			apiStatus: error.status ?? error.code ?? null,
+			message: error.message
+		};
+	} catch (e) {
+		return null;
+	}
+};
+
 // 画面側で原因を切り分けられるよう、機微情報を含まない範囲でエラーの概要を返す
-const toErrorDetail = (stage, e, extra = {}) => ({
-	stage,
-	name: typeof e?.name === 'string' ? e.name : 'Error',
-	status: e?.status ?? e?.code ?? null,
-	message:
-		typeof e?.message === 'string'
-			? redactSecrets(e.message).slice(0, 500)
-			: '',
-	...extra
-});
+const toErrorDetail = (stage, e, extra = {}) => {
+	const raw = typeof e?.message === 'string' ? e.message : '';
+	const api = unwrapApiErrorMessage(raw);
+
+	return {
+		stage,
+		name: typeof e?.name === 'string' ? e.name : 'Error',
+		status: e?.status ?? e?.code ?? null,
+		...(api ? { apiStatus: api.apiStatus } : {}),
+		message: redactSecrets(api?.message ?? raw).slice(0, 500),
+		...extra
+	};
+};
 
 // モデルの出力は信用せず、アプリが扱える値に丸めてから返す
 const sanitizeReceipt = (parsed) => {

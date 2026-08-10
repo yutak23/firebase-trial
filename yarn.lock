@@ -9039,10 +9039,10 @@ nostics@^1.1.4:
   resolved "https://registry.yarnpkg.com/nostics/-/nostics-1.2.0.tgz#1362df6de2ca8456b521914501abf6c52c4d7fb5"
   integrity sha512-FGqEfhQjrvo1lL8KFifdTQiNwwQHJxC1jtYE1Rc54qF/jxONUNL+kC9gS1krX8Q65PgrQ5fCqH/I4NhWBvdSqg==
 
-npm-check-updates@^21.0.3:
-  version "21.0.3"
-  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-21.0.3.tgz#e71d6a3a2ece1b4fb7389b6c3999b345f0af24d1"
-  integrity sha512-8y0fqtxdo5JhwzxcS9rZd969tvPbSZ3MzQoG5Fj8eqL42t1Jsg5tjZCz8CYuXLE8LNbbyV+1xxR/f/T4AdPmdg==
+npm-check-updates@^22.2.9:
+  version "22.2.9"
+  resolved "https://registry.yarnpkg.com/npm-check-updates/-/npm-check-updates-22.2.9.tgz#d0ea02f973e070d3a3b6ef0c165e7bd6d20dc993"
+  integrity sha512-DVeZ0KirHfliSsHuR2o7cHE+tW439sVHfJjF6cGWeDiY0Wyl3BI/jS4zV0eixtcMOquFbcF1Su/FsxOvk5MoYA==
 
 npm-normalize-package-bin@^1.0.0:
   version "1.0.1"

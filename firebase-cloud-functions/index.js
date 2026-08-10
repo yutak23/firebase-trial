@@ -1,6 +1,11 @@
 // eslint-disable-next-line import/no-unresolved
 import * as functions from 'firebase-functions/v1';
-import admin from 'firebase-admin';
+// firebase-admin v14 で名前空間API（admin.firestore() など）が削除されたため、
+// モジュラーAPIのサブパスから読み込む
+// eslint-disable-next-line import/no-unresolved
+import { initializeApp } from 'firebase-admin/app';
+// eslint-disable-next-line import/no-unresolved
+import { getFirestore } from 'firebase-admin/firestore';
 import camelcaseKeys from 'camelcase-keys';
 import snakecaseKeys from 'snakecase-keys';
 import lodash from 'lodash';
@@ -12,9 +17,9 @@ import { GoogleGenAI, Type } from '@google/genai';
 const { omit } = lodash;
 const isLocal = process.env.NODE_ENV === 'local';
 
-admin.initializeApp();
+initializeApp();
 
-const db = admin.firestore();
+const db = getFirestore();
 const bigquery = isLocal
 	? new BigQuery({ apiEndpoint: 'http://localhost:9050' })
 	: new BigQuery();

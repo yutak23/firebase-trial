@@ -45,5 +45,8 @@ jobs:
           create_credentials_file: true
           export_environment_variables: true
 
+      # --force は Artifact Registry のクリーンアップポリシー設定の確認をスキップするために必要
+      # （未設定の場合、--non-interactive だけだとデプロイ成功後にエラー終了してしまう）
+      # デフォルトの保持期間（1日）でポリシーが自動設定される
       - name: deploy functions
-        run: npx firebase deploy --only functions --project fir-cloud-functions-trial --non-interactive
+        run: npx firebase deploy --only functions --project fir-cloud-functions-trial --non-interactive --force

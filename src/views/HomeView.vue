@@ -15,8 +15,9 @@ import {
 import { DateTime } from 'luxon';
 import snakecaseKeys from 'snakecase-keys';
 
-import VueDatePicker from '@vuepic/vue-datepicker';
+import { VueDatePicker } from '@vuepic/vue-datepicker';
 import '@vuepic/vue-datepicker/dist/main.css';
+import { enUS, ja } from 'date-fns/locale';
 
 import { db } from '@/firebase';
 import { converter } from '@/firebase/store';
@@ -24,7 +25,7 @@ import { fetchGroupMembers } from '@/service/group-service';
 import { scanReceipt } from '@/service/receipt-service';
 import { fileToResizedBase64 } from '@/utils/image';
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 const props = defineProps({
 	selectedGroup: { type: String, required: true, default: null }
 });
@@ -47,6 +48,11 @@ const scanning = ref(false);
 const scanError = ref(null);
 const datePickDialog = ref(false);
 const datepicker = ref(null);
+// VueDatePicker v12 の locale は文字列ではなく date-fns のロケールを受け取る
+const datePickerLocales = { ja, en: enUS };
+const datePickerLocale = computed(
+	() => datePickerLocales[locale.value] ?? enUS
+);
 const openBookDataDialog = () => {
 	formInstanceId += 1; // 進行中のスキャン結果を無効化する
 	scanning.value = false;
@@ -528,14 +534,13 @@ await getAllCurrentData();
 					<VueDatePicker
 						ref="datepicker"
 						v-model="book.date"
-						:locale="$i18n.locale"
-						:enable-time-picker="false"
-						:on-click-outside="onClickOutside"
-						format="yyyy-MM-dd"
-						:clearable="false"
+						:locale="datePickerLocale"
+						:time-config="{ enableTimePicker: false }"
+						:config="{ onClickOutside }"
+						:formats="{ input: 'yyyy-MM-dd' }"
+						:input-attrs="{ clearable: false }"
 						auto-apply
 						teleport
-						position="center"
 						style="width: 200px"
 						@closed="datePickDialog = false"
 					/>

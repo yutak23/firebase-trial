@@ -37,6 +37,10 @@ const navigateToUserInvites = () => {
 	router.push({ name: 'userInvites', params: {} });
 	closeDrawer();
 };
+const navigateToSettings = () => {
+	router.push({ name: 'settings', params: {} });
+	closeDrawer();
+};
 
 const logout = async () => {
 	try {
@@ -145,6 +149,15 @@ const selectedGroup = ref(groups[0].id); // TODO piniaでselectedGroupを管理�
 							</template>
 
 							<v-list-item-title> グループからの招待一覧 </v-list-item-title>
+						</v-list-item>
+						<v-list-item @click="navigateToSettings">
+							<template v-slot:prepend>
+								<v-icon icon="mdi-tune" />
+							</template>
+
+							<v-list-item-title>
+								{{ $t('settings.title') }}
+							</v-list-item-title>
 						</v-list-item>
 					</v-list>
 

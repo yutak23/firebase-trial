@@ -17,6 +17,21 @@
 解析は Cloud Functions の `scanReceipt`（callable, App Check 必須）から Gemini API を呼んで行うため、
 API キーの設定が必要。
 
+### 使用するモデルの切り替え
+
+ドロワーの`設定`から解析に使うモデルを選べる。選択はブラウザの localStorage
+（キー: `settings.aiModel`）に保存されるため、端末・ブラウザごとの設定になる。
+
+| 選択肢                | モデルID                | 用途                       |
+| --------------------- | ----------------------- | -------------------------- |
+| Gemini 3.6 Flash      | `gemini-3.6-flash`      | 読み取り精度を優先（既定） |
+| Gemini 3.5 Flash Lite | `gemini-3.5-flash-lite` | 速度とコストを優先         |
+
+選択肢は画面側の `src/constants/ai-model.js` と Cloud Functions 側の
+`RECEIPT_MODELS` の両方で持っている。呼び出し元が指定したモデル名をそのまま
+Gemini に渡さないよう、サーバ側でも一覧に無いモデルは `invalid-argument` で弾くため、
+モデルを追加・変更するときは両方を合わせること。
+
 - [Google AI Studio](https://aistudio.google.com/apikey) で API キーを取得
 
 - ローカル（エミュレータ）  
@@ -63,7 +78,7 @@ App Engine のデフォルトサービスアカウントはプロジェクトレ
 `404 NOT_FOUND` が出る場合はモデルが使えなくなっている可能性がある。
 古いモデルは ListModels には残ったまま、`generateContent` すると
 `This model ... is no longer available to new users` で 404 になることがある
-（`gemini-2.5-flash` がこれに該当したため `index.js` の `RECEIPT_MODEL` を差し替えた）。
+（`gemini-2.5-flash` がこれに該当したため `index.js` の `RECEIPT_MODELS` から外した）。
 実際に使えるモデルは以下で確認できる。
 
 ```bash

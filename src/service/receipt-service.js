@@ -5,8 +5,9 @@ import { functions } from '@/firebase';
 const scanReceiptFunc = httpsCallable(functions, 'scanReceipt');
 
 // { date, storeName, price, category } を返す
-const scanReceipt = async ({ imageBase64, mimeType }) => {
-	const { data } = await scanReceiptFunc({ imageBase64, mimeType });
+// model は未指定ならCloud Functions側の既定モデルが使われる
+const scanReceipt = async ({ imageBase64, mimeType, model }) => {
+	const { data } = await scanReceiptFunc({ imageBase64, mimeType, model });
 	return data;
 };
 

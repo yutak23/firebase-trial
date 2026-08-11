@@ -2,9 +2,10 @@
 // 追加・変更する場合は firebase-cloud-functions/index.js の RECEIPT_MODELS も合わせること
 // （サーバ側でも同じ一覧で検証しており、ここにしかないモデルを指定すると invalid-argument になる）
 // key はモデルIDにドットや記号が含まれてi18nのキーに使えないため、翻訳キー用に別で持つ
+// 先頭が既定のモデル（設定画面の並び順もこの順になる）
 const AI_MODELS = [
-	{ id: 'gemini-3.6-flash', key: 'flash' },
-	{ id: 'gemini-3.5-flash-lite', key: 'flash_lite' }
+	{ id: 'gemini-3.5-flash-lite', key: 'flash_lite' },
+	{ id: 'gemini-3.6-flash', key: 'flash' }
 ];
 
 const DEFAULT_AI_MODEL = AI_MODELS[0].id;

@@ -212,8 +212,9 @@ const RECEIPT_MODELS = [
 	// 長い思考を必要としないためレイテンシとコストを優先して thinkingLevel を下げる
 	// （小計/合計の判別や和暦変換の判断は残したいので MINIMAL にはしない）
 	// Gemini 3 系は thinkingBudget ではなく thinkingLevel で指定する
-	{ id: 'gemini-3.6-flash', thinkingLevel: ThinkingLevel.LOW },
-	{ id: 'gemini-3.5-flash-lite', thinkingLevel: ThinkingLevel.LOW }
+	// 先頭がモデル未指定時の既定
+	{ id: 'gemini-3.5-flash-lite', thinkingLevel: ThinkingLevel.LOW },
+	{ id: 'gemini-3.6-flash', thinkingLevel: ThinkingLevel.LOW }
 ];
 const DEFAULT_RECEIPT_MODEL = RECEIPT_MODELS[0];
 const findReceiptModel = (id) =>

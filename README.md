@@ -24,8 +24,8 @@ API キーの設定が必要。
 
 | 選択肢                | モデルID                | 用途                       |
 | --------------------- | ----------------------- | -------------------------- |
-| Gemini 3.6 Flash      | `gemini-3.6-flash`      | 読み取り精度を優先（既定） |
-| Gemini 3.5 Flash Lite | `gemini-3.5-flash-lite` | 速度とコストを優先         |
+| Gemini 3.5 Flash Lite | `gemini-3.5-flash-lite` | 速度とコストを優先（既定） |
+| Gemini 3.6 Flash      | `gemini-3.6-flash`      | 読み取り精度を優先         |
 
 選択肢は画面側の `src/constants/ai-model.js` と Cloud Functions 側の
 `RECEIPT_MODELS` の両方で持っている。呼び出し元が指定したモデル名をそのまま

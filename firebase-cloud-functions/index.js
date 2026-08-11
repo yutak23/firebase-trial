@@ -12,7 +12,7 @@ import lodash from 'lodash';
 // eslint-disable-next-line import/extensions
 import md5 from 'crypto-js/md5.js';
 import { BigQuery } from '@google-cloud/bigquery';
-import { GoogleGenAI, Type } from '@google/genai';
+import { GoogleGenAI, ThinkingLevel, Type } from '@google/genai';
 
 const { omit } = lodash;
 const isLocal = process.env.NODE_ENV === 'local';
@@ -359,6 +359,11 @@ export const scanReceipt = functions
 					{ text: RECEIPT_PROMPT }
 				],
 				config: {
+					// レシートの読み取りは responseSchema で出力が固定されており、
+					// 長い思考を必要としないためレイテンシとコストを優先して下げる
+					// （小計/合計の判別や和暦変換の判断は残したいので MINIMAL にはしない）
+					// Gemini 3 系は thinkingBudget ではなく thinkingLevel で指定する
+					thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
 					responseMimeType: 'application/json',
 					responseSchema: {
 						type: Type.OBJECT,

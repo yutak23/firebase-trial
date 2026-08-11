@@ -34,6 +34,24 @@
 			}
 		}
 	},
+	"settings": {
+		"title": "設定",
+		"saved": "設定を保存しました",
+		"ai_model": {
+			"title": "AIモデル",
+			"description": "レシート撮影の自動入力に使うモデルを選びます。設定はこの端末にのみ保存されます。",
+			"models": {
+				"flash_lite": {
+					"title": "Gemini 3.5 Flash Lite",
+					"description": "速度とコストを優先する（既定）"
+				},
+				"flash": {
+					"title": "Gemini 3.6 Flash",
+					"description": "読み取り精度を優先する"
+				}
+			}
+		}
+	},
 	"$vuetify": {
 		"dataFooter": {
 			"itemsPerPageText": "1ページあたりの件数：",

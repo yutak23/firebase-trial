@@ -1,6 +1,7 @@
 <script setup>
 import { ref, reactive, computed } from 'vue';
 import { useI18n } from 'vue-i18n';
+import { storeToRefs } from 'pinia';
 import {
 	doc,
 	collection,
@@ -24,8 +25,11 @@ import { converter } from '@/firebase/store';
 import { fetchGroupMembers } from '@/service/group-service';
 import { scanReceipt } from '@/service/receipt-service';
 import { fileToResizedBase64 } from '@/utils/image';
+import useSettingsStore from '@/stores/settings';
 
 const { t, locale } = useI18n();
+// 設定画面で選んだモデルでレシートを解析する
+const { aiModel } = storeToRefs(useSettingsStore());
 const props = defineProps({
 	selectedGroup: { type: String, required: true, default: null }
 });
@@ -184,7 +188,11 @@ const onReceiptSelected = async (event) => {
 		const { imageBase64, mimeType } = await fileToResizedBase64(file);
 		if (isStale()) return;
 
-		const result = await scanReceipt({ imageBase64, mimeType });
+		const result = await scanReceipt({
+			imageBase64,
+			mimeType,
+			model: aiModel.value
+		});
 		if (isStale()) return;
 
 		// レシートとして何も読み取れなかった場合はフォームを書き換えない

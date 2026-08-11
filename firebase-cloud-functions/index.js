@@ -204,7 +204,21 @@ export const replyInvite = functions
 // レシート画像から家計簿の入力内容を推定する
 // gemini-2.5-flash は新規ユーザーには提供されなくなり404になるため、後継モデルを使う
 // （ListModelsには残るが generateContent すると NOT_FOUND になる）
-const RECEIPT_MODEL = 'gemini-3.6-flash';
+// 画面（src/constants/ai-model.js）の選択肢と対応させること。
+// 呼び出し元の指定をそのままモデル名に使うと未検証・高額なモデルを叩かれるため、
+// ここにある値だけを許可する
+const RECEIPT_MODELS = [
+	// レシートの読み取りは responseSchema で出力が固定されており、
+	// 長い思考を必要としないためレイテンシとコストを優先して thinkingLevel を下げる
+	// （小計/合計の判別や和暦変換の判断は残したいので MINIMAL にはしない）
+	// Gemini 3 系は thinkingBudget ではなく thinkingLevel で指定する
+	// 先頭がモデル未指定時の既定
+	{ id: 'gemini-3.5-flash-lite', thinkingLevel: ThinkingLevel.LOW },
+	{ id: 'gemini-3.6-flash', thinkingLevel: ThinkingLevel.LOW }
+];
+const DEFAULT_RECEIPT_MODEL = RECEIPT_MODELS[0];
+const findReceiptModel = (id) =>
+	RECEIPT_MODELS.find((model) => model.id === id) ?? null;
 const RECEIPT_MIME_TYPES = ['image/jpeg', 'image/png', 'image/webp'];
 const RECEIPT_MAX_IMAGE_BYTES = 2 * 1024 * 1024;
 const RECEIPT_CATEGORIES = [
@@ -343,6 +357,17 @@ export const scanReceipt = functions
 
 		const { imageBase64, mimeType } = data;
 
+		// 画面側でモデルを選べるようにしているが、未指定でも既定モデルで動くようにする
+		const model =
+			data.model === undefined || data.model === null
+				? DEFAULT_RECEIPT_MODEL
+				: findReceiptModel(data.model);
+		if (!model)
+			throw new functions.https.HttpsError(
+				'invalid-argument',
+				'unsupported model.'
+			);
+
 		// base64は元データの約4/3の長さになる
 		if ((imageBase64.length * 3) / 4 > RECEIPT_MAX_IMAGE_BYTES)
 			throw new functions.https.HttpsError(
@@ -353,17 +378,13 @@ export const scanReceipt = functions
 		let response;
 		try {
 			response = await getGenAi().models.generateContent({
-				model: RECEIPT_MODEL,
+				model: model.id,
 				contents: [
 					{ inlineData: { data: imageBase64, mimeType } },
 					{ text: RECEIPT_PROMPT }
 				],
 				config: {
-					// レシートの読み取りは responseSchema で出力が固定されており、
-					// 長い思考を必要としないためレイテンシとコストを優先して下げる
-					// （小計/合計の判別や和暦変換の判断は残したいので MINIMAL にはしない）
-					// Gemini 3 系は thinkingBudget ではなく thinkingLevel で指定する
-					thinkingConfig: { thinkingLevel: ThinkingLevel.LOW },
+					thinkingConfig: { thinkingLevel: model.thinkingLevel },
 					responseMimeType: 'application/json',
 					responseSchema: {
 						type: Type.OBJECT,
@@ -384,7 +405,7 @@ export const scanReceipt = functions
 			throw new functions.https.HttpsError(
 				'internal',
 				'failed to call the model.',
-				toErrorDetail('gemini', e, { model: RECEIPT_MODEL })
+				toErrorDetail('gemini', e, { model: model.id })
 			);
 		}
 
@@ -399,6 +420,7 @@ export const scanReceipt = functions
 				'internal',
 				'failed to parse the model response.',
 				toErrorDetail('parse', e, {
+					model: model.id,
 					finishReason: response?.candidates?.[0]?.finishReason ?? null,
 					blockReason: response?.promptFeedback?.blockReason ?? null,
 					textLength:
@@ -412,6 +434,7 @@ export const scanReceipt = functions
 		functions.logger.info(
 			'scanReceipt success',
 			`uid: ${context.auth.uid}`,
+			`model: ${model.id}`,
 			`detected: ${result.price !== null}`
 		);
 

@@ -11,6 +11,7 @@ import GlobalView from '@/views/GlobalView.vue';
 import HomeView from '@/views/HomeView.vue';
 import UserInviteView from '@/views/UserInviteView.vue';
 import GroupSettingsView from '@/views/GroupSettingsView.vue';
+import SettingsView from '@/views/SettingsView.vue';
 import WelcomeView from '@/views/WelcomeView.vue';
 
 const router = createRouter({
@@ -33,7 +34,8 @@ const router = createRouter({
 					name: 'userInvites',
 					component: UserInviteView,
 					meta: { requiresAuth: true }
-				}
+				},
+				{ path: '/settings', name: 'settings', component: SettingsView }
 			]
 		},
 		{

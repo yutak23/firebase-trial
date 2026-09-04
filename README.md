@@ -22,10 +22,12 @@ API キーの設定が必要。
 ドロワーの`設定`から解析に使うモデルを選べる。選択はブラウザの localStorage
 （キー: `settings.aiModel`）に保存されるため、端末・ブラウザごとの設定になる。
 
-| 選択肢                | モデルID                | 用途                       |
-| --------------------- | ----------------------- | -------------------------- |
-| Gemini 3.5 Flash Lite | `gemini-3.5-flash-lite` | 速度とコストを優先（既定） |
-| Gemini 3.6 Flash      | `gemini-3.6-flash`      | 読み取り精度を優先         |
+| 選択肢                | モデルID                | 用途                                     |
+| --------------------- | ----------------------- | ---------------------------------------- |
+| Gemini 3.8 Flash      | `gemini-3.8-flash`      | 最新世代。読み取り精度を優先（既定）     |
+| Gemini 3.7 Flash      | `gemini-3.7-flash`      | 3.8 で読み取りがうまくいかないときに使う |
+| Gemini 3.6 Flash      | `gemini-3.6-flash`      | 読み取り精度を優先                       |
+| Gemini 3.5 Flash Lite | `gemini-3.5-flash-lite` | 速度とコストを優先                       |
 
 選択肢は画面側の `src/constants/ai-model.js` と Cloud Functions 側の
 `RECEIPT_MODELS` の両方で持っている。呼び出し元が指定したモデル名をそのまま

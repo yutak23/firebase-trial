@@ -4,8 +4,10 @@
 // key はモデルIDにドットや記号が含まれてi18nのキーに使えないため、翻訳キー用に別で持つ
 // 先頭が既定のモデル（設定画面の並び順もこの順になる）
 const AI_MODELS = [
-	{ id: 'gemini-3.5-flash-lite', key: 'flash_lite' },
-	{ id: 'gemini-3.6-flash', key: 'flash' }
+	{ id: 'gemini-3.8-flash', key: 'flash_3_8' },
+	{ id: 'gemini-3.7-flash', key: 'flash_3_7' },
+	{ id: 'gemini-3.6-flash', key: 'flash_3_6' },
+	{ id: 'gemini-3.5-flash-lite', key: 'flash_lite_3_5' }
 ];
 
 const DEFAULT_AI_MODEL = AI_MODELS[0].id;

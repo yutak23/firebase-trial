@@ -41,13 +41,21 @@
 			"title": "AIモデル",
 			"description": "レシート撮影の自動入力に使うモデルを選びます。設定はこの端末にのみ保存されます。",
 			"models": {
-				"flash_lite": {
-					"title": "Gemini 3.5 Flash Lite",
-					"description": "速度とコストを優先する（既定）"
+				"flash_3_8": {
+					"title": "Gemini 3.8 Flash",
+					"description": "最新世代。読み取り精度を優先する（既定）"
 				},
-				"flash": {
+				"flash_3_7": {
+					"title": "Gemini 3.7 Flash",
+					"description": "3.8 で読み取りがうまくいかないときに使う"
+				},
+				"flash_3_6": {
 					"title": "Gemini 3.6 Flash",
 					"description": "読み取り精度を優先する"
+				},
+				"flash_lite_3_5": {
+					"title": "Gemini 3.5 Flash Lite",
+					"description": "速度とコストを優先する"
 				}
 			}
 		}
